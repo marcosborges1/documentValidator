@@ -36,7 +36,7 @@ const Arquivos = () => (
         <Card small className="mb-4">
           <CardHeader className="border-bottom">
             
-            <a href="#">
+            <a href="/arquivos/inserir">
               <i style={{fontSize:'22px'}} class="fas fa-plus-circle"></i>
             </a>  
           </CardHeader>
@@ -47,6 +47,9 @@ const Arquivos = () => (
                 <tr>
                   <th scope="col" className="border-0">
                     Ações
+                  </th>
+                  <th scope="col" className="border-0">
+                    Nome
                   </th>
                   <th scope="col" className="border-0">
                     Arquivo
@@ -64,6 +67,7 @@ const Arquivos = () => (
                         <a href="#" className="col-1"><i className="fas fa-edit"></i></a>
                         <a href="#" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>
                       </td>
+                      <td>{arquivo.arquivo}</td>
                       <td>{arquivo.arquivo}</td>
                       <td>{arquivo.usuario_codigo}</td>
                     </tr>

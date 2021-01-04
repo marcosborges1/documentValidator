@@ -16,6 +16,7 @@ import Errors from "./views/Errors";
 import Usuarios from "./views/Usuarios";
 import UsuariosInserir from "./views/UsuariosInserir";
 import Arquivos from "./views/Arquivos";
+import ArquivosInserir from "./views/ArquivosInserir";
 
 export default [
   {
@@ -43,8 +44,15 @@ export default [
   },
   {
     path: "/arquivos",
+    exact: true,
     layout: DefaultLayout,
     component: Arquivos
+  },
+  {
+    path: "/arquivos/inserir",
+    exact: true,
+    layout: DefaultLayout,
+    component: ArquivosInserir
   },
 
 

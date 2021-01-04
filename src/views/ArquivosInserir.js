@@ -2,14 +2,13 @@ import React from "react";
 import { Container, Row, Col, Card, CardHeader, CardBody,Form, FormInput, FormGroup, Button } from "shards-react";
 
 import PageTitle from "../components/common/PageTitle";
+// import ArrowBack from "../components/common/ArrowBack";
 
-
-const UsuariosInserir = (props) => (
-
+const ArquivosInserir = () => (
   <Container fluid className="main-content-container px-4">
     {/* Page Header */}
     <Row noGutters className="page-header py-4">
-      <PageTitle sm="4" title="Inserir" subtitle="Usuário" className="text-sm-left" />
+      <PageTitle sm="4" title="Inserir" subtitle="Arquivo" className="text-sm-left" />
     </Row>
 
     {/* Default Light Table */}
@@ -25,21 +24,11 @@ const UsuariosInserir = (props) => (
                 <Col lg="6" md="6">
                     <FormGroup>
                       <label htmlFor="#nome">Nome</label>
-                      <FormInput id="#nome" placeholder="Digite seu nome completo" />
+                      <FormInput id="#nome" placeholder="Digite o nome do arquivo" />
                     </FormGroup>
                     <FormGroup>
-                      <label htmlFor="#identificacao">Identificação</label>
-                      <FormInput id="#identificacao" placeholder="Digite sua identificação" />
-                    </FormGroup>
-                </Col>
-                <Col lg="6" md="6">
-                    <FormGroup>
-                      <label htmlFor="#email">E-mail</label>
-                      <FormInput id="#email" placeholder="Digite seu e-mail" />
-                    </FormGroup>
-                    <FormGroup>
-                      <label htmlFor="#senha">Senha</label>
-                      <FormInput type="password" id="#senha" placeholder="Digite sua Senha" />
+                      <label htmlFor="#arquivo">Arquivo</label>
+                      <FormInput type="file" />
                     </FormGroup>
                 </Col>
               <Col lg="12"className="p-3" md="12">
@@ -57,6 +46,6 @@ const UsuariosInserir = (props) => (
       </Col>
     </Row>
   </Container>
-); 
+);
 
-export default UsuariosInserir;
+export default ArquivosInserir;
