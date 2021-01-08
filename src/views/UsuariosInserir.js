@@ -1,7 +1,9 @@
 import React from "react";
-import { Container, Row, Col, Card, CardHeader, CardBody,Form, FormInput, FormGroup, Button } from "shards-react";
-
+// import { Container, Row, Col, Card, CardHeader, CardBody,Form, FormInput, FormGroup, Button } from "shards-react";
+import { Container, Row, Col, Card, CardHeader, CardBody, Button } from "shards-react";
+import { Form, Field } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
+import { Component } from "react";
 
 
 const UsuariosInserir = (props) => (
@@ -20,7 +22,17 @@ const UsuariosInserir = (props) => (
             <h6 className="m-0"><i style={{color:"#007BFF"}} className="fas fa-exclamation-triangle"></i> Preencha os campos abaixo.</h6>
           </CardHeader>
           <CardBody className="p-0 pb-3">
-            <Form>
+
+          {/* <Form 
+						onSubmit={onSubmit} 
+						validate={initalValidate}
+						render={({ handleSubmit}) => {
+              return (
+                <h1>adsfas</h1>
+              )
+            }} /> */}
+          
+            {/* <Form>
               <Row className="p-4 pb-3">
                 <Col lg="6" md="6">
                     <FormGroup>
@@ -51,12 +63,20 @@ const UsuariosInserir = (props) => (
                 </Button>
               </Col>
               </Row>
-            </Form>
+            </Form> */}
           </CardBody>
         </Card>
       </Col>
     </Row>
   </Container>
 ); 
+
+const onSubmit = (values) => {
+  return "";
+}
+
+const initalValidate = (values) => {
+  return "";
+}
 
 export default UsuariosInserir;

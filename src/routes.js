@@ -13,7 +13,7 @@ import Errors from "./views/Errors";
 // import Tables from "./views/Tables";
 // import BlogPosts from "./views/BlogPosts";
 
-import Usuarios from "./views/Usuarios";
+import Users from "./views/Users";
 import UsuariosInserir from "./views/UsuariosInserir";
 import Arquivos from "./views/Arquivos";
 import ArquivosInserir from "./views/ArquivosInserir";
@@ -34,7 +34,7 @@ export default [
     path: "/usuarios",
     exact: true,
     layout: DefaultLayout,
-    component: Usuarios
+    component: Users
   },
   {
     path: "/usuarios/inserir",
