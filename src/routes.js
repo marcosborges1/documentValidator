@@ -17,6 +17,8 @@ import Users from "./views/Users";
 import UserInsert from "./views/UserInsert";
 import Files from "./views/Files";
 import FileInsert from "./views/FileInsert";
+import Login from "./views/Login"
+import FilesValidator from "./views/FilesValidator"
 
 export default [
   {
@@ -65,6 +67,16 @@ export default [
     exact: true,
     layout: DefaultLayout,
     component: FileInsert
+  },
+  {
+    path: "/login",
+    exact: true,
+    layout: Login
+  },
+  {
+    path: "/validacao",
+    exact: true,
+    layout: FilesValidator
   },
 
 
