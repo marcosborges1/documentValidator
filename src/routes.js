@@ -14,9 +14,9 @@ import Errors from "./views/Errors";
 // import BlogPosts from "./views/BlogPosts";
 
 import Users from "./views/Users";
-import UsuariosInserir from "./views/UsuariosInserir";
-import Arquivos from "./views/Arquivos";
-import ArquivosInserir from "./views/ArquivosInserir";
+import UserInsert from "./views/UserInsert";
+import Files from "./views/Files";
+import FileInsert from "./views/FileInsert";
 
 export default [
   {
@@ -40,19 +40,31 @@ export default [
     path: "/usuarios/inserir",
     exact: true,
     layout: DefaultLayout,
-    component: UsuariosInserir
+    component: UserInsert
+  },
+  {
+    path: "/usuarios/editar/:codigoUsuario",
+    exact: true,
+    layout: DefaultLayout,
+    component: UserInsert
   },
   {
     path: "/arquivos",
     exact: true,
     layout: DefaultLayout,
-    component: Arquivos
+    component: Files
   },
   {
     path: "/arquivos/inserir",
     exact: true,
     layout: DefaultLayout,
-    component: ArquivosInserir
+    component: FileInsert
+  },
+  {
+    path: "/arquivos/editar/:codigoArquivo",
+    exact: true,
+    layout: DefaultLayout,
+    component: FileInsert
   },
 
 

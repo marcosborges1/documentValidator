@@ -1,23 +1,34 @@
 import React, {Component} from "react";
 import { render } from "react-dom";
-import { Container, Row, Col, Card, CardHeader, CardBody } from "shards-react";
+import { Container, Alert, Row, Col, Card, CardHeader, CardBody } from "shards-react";
 import * as UserAPI from "../utils/UserAPI"
+import {Link} from 'react-router-dom'
+// import { connect } from 'react-redux' 
+
 
 import PageTitle from "../components/common/PageTitle";
 
 class Users extends Component {
 
   state = {
-    dataUsers: []
+    data: []
   }
 
   componentDidMount() {
-    UserAPI.getAll().then((dataUsers)=> this.setState({dataUsers}))
+    UserAPI.listAll().then(data=> this.setState({data}))
   }
+  removeUser = (user,e) => {
+
+    e.preventDefault();
+    
+    UserAPI.remove(user).then(data=> console.log(data))
+    this.setState(
+      {data:this.state.data.filter(res=>res.codigoUsuario!=user.codigoUsuario)}
+    )
+	}
   render() {
 
-    const {dataUsers} = this.state;
-
+    const {data} = this.state;
     return (
       <Container  fluid className="main-content-container px-4">
         {/* Page Header */}
@@ -30,13 +41,14 @@ class Users extends Component {
           <Col>
             <Card small className="mb-4">
               <CardHeader className="border-bottom">
-                
-                <a href={`/usuarios/inserir`} title="Adicionar Usuários">
+                <Link to={`/usuarios/inserir`} title="Adicionar Usuários">
                   <i style={{fontSize:'22px'}} className="fas fa-plus-circle"></i>
-                </a>  
+                </Link>  
               </CardHeader>
               <CardBody className="p-0 pb-3">
-                
+              {data.length==0 && (<Alert theme="light" style={{textAlign:"center"}}><i className="fas fa-exclamation-triangle"></i> Não existem Usuários cadastrados!</Alert>)}
+              {data.length>0 &&
+                (
                 <table className="table mb-0 table-hover">
                   <thead className="bg-light">
                     <tr>
@@ -55,12 +67,13 @@ class Users extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataUsers && dataUsers.map((user)=>
+                    {data && data.map((user)=>
                       (
                         <tr key={user.codigoUsuario}>
                           <td className="align-items-center">
-                            <a href="javascript:void(0);" title="Editar Usuário" className="col-1"><i className="fas fa-edit"></i></a>
-                            <a href="javascript:void(0);" title="Excluir Usuário" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>
+                            <Link to={`usuarios/editar/${user.codigoUsuario}`} title="Editar Usuário" className="col-1"><i className="fas fa-edit"></i>
+                            </Link>
+                            <a href="javascript:void(0);" onClick={(e)=>this.removeUser(user,e)} title="Excluir Usuário" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>
                           </td>
                           <td>{user.nome}</td>
                           <td>{user.identificacao}</td>
@@ -70,7 +83,7 @@ class Users extends Component {
                     )}
                     
                   </tbody>
-                </table>
+                </table>)}
               </CardBody>
             </Card>
           </Col>

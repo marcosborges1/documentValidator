@@ -1,5 +1,5 @@
-const api = process.env.USER_API_URL || 'http://localhost:4000'
-const modulus = "Usuario"
+const api = process.env.FILE_API_URL || 'http://localhost:4000'
+const modulus = "Arquivo"
 // let token = localStorage.token
 
 // if (!token)
@@ -18,15 +18,16 @@ export const listAll = () =>
 export const insert = (body) =>
   fetch(`${api}/inserir${modulus}`, {
     method: 'POST',
-    headers: {
-    //   ...headers,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  }).then(res => res.json())
+    // headers: {
+    // //   ...headers,
+    //   // 'Content-Type': 'application/json'
+    //   'content-type': 'multipart/form-data'
+    // },
+    body: body
+  })
 
-  export const update = (codigoUsuario, body) =>
-  fetch(`${api}/atualizar${modulus}/${codigoUsuario}`, {
+  export const update = (codigoArquivo, body) =>
+  fetch(`${api}/atualizar${modulus}/${codigoArquivo}`, {
     method: 'PUT',
     headers: {
     //   ...headers,
@@ -36,13 +37,13 @@ export const insert = (body) =>
   }).then(res => res.json())
 
 export const remove = (data) =>
-  fetch(`${api}/excluir${modulus}/${data.codigoUsuario}`, { 
+  fetch(`${api}/excluir${modulus}/${data.codigoArquivo}`, { 
         method: 'DELETE'
         // headers 
     })
     .then(res => res.json())
-export const get = (codigoUsuario) => 
-    fetch(`${api}/obter${modulus}/${codigoUsuario}`, { 
+export const get = (codigoArquivo) => 
+    fetch(`${api}/obter${modulus}/${codigoArquivo}`, { 
             method: 'GET'
             // headers 
         })

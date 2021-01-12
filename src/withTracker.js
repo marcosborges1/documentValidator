@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import GoogleAnalytics from "react-ga";
+// import GoogleAnalytics from "react-ga";
 
-GoogleAnalytics.initialize(process.env.REACT_APP_GAID || "UA-115105611-2");
+// GoogleAnalytics.initialize(process.env.REACT_APP_GAID || "UA-115105611-2");
 
 const withTracker = (WrappedComponent, options = {}) => {
   const trackPage = page => {
@@ -9,11 +9,11 @@ const withTracker = (WrappedComponent, options = {}) => {
       return;
     }
 
-    GoogleAnalytics.set({
-      page,
-      ...options
-    });
-    GoogleAnalytics.pageview(page);
+    // GoogleAnalytics.set({
+    //   page,
+    //   ...options
+    // });
+    // GoogleAnalytics.pageview(page);
   };
 
   const BASENAME = process.env.REACT_APP_BASENAME || "";

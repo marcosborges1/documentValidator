@@ -1,0 +1,11 @@
+.required {
+    color:rgb(211, 62, 62);
+}
+.arquivo_selecionado {
+    background: rgb(235, 235, 250);
+    border: 1px solid blue;
+    padding: 3px;
+}
+.other_choice {
+    margin-left: 10px;
+}
