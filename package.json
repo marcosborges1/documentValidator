@@ -2,7 +2,7 @@
   "name": "docval",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://marcosborges1.github.io/documentValidator/",
+  "homepage": "./",
   "dependencies": {
     "camelize": "^1.0.0",
     "chart.js": "^2.7.3",
@@ -30,8 +30,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build", 
     "build:prod": "npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -45,8 +43,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "gh-pages": "^3.1.0"
-  }
+  ]
 }
