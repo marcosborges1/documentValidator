@@ -2,7 +2,7 @@
   "name": "docval",
   "version": "1.0.0",
   "private": true,
-  "homepage": "./",
+  "homepage": "https://marcosborges1.github.io/documentValidator/",
   "dependencies": {
     "camelize": "^1.0.0",
     "chart.js": "^2.7.3",
