@@ -11,27 +11,40 @@ class Login extends Component {
 
   state = {
     dataUsers: {
-      email: "",
-      senha: ""
+      email: "marcia.borges@gmail.com",
+      senha: "senhadamarcia"
+    },
+    errorMessage: false,
+    isLoged:false
+  }
+  async componentDidMount() {
+    
+    const result = await UserAPI.isAutenticate()
+    if(result.status==200) {
+      this.setState({isLoged:true})
+    }
+    else {
+      this.setState({isLoged:false})
     }
   }
   onSubmit = async (values) => {
-    
-    const {codigoUsuario} = this.props.match.params;
 
-    if(!codigoUsuario) {
-      UserAPI.insert(values);
-      //Mensagem
+    const result = await UserAPI.login(values);
+    
+    if(result.data["auth"])  {
+      localStorage.token = result.data["token"];
+      this.props.history.push('/')
     }
     else {
-      UserAPI.update(codigoUsuario, values)
-      //Mensagem
+        this.setState({errorMessage:true})
     }
-    this.props.history.push('/usuarios')
   }
 
   render() {
+
+    const {errorMessage,isLoged} = this.state;
     return (
+
       <Container fluid className="main-content-container px-4 pb-4">
         {/* Page Header */}
         <Row noGutters className="page-header py-4">
@@ -42,7 +55,8 @@ class Login extends Component {
           {/* Editor */}
           <Col lg="5" md="6" xs="8">
             <Card small className="mb-4" style={{marginTop:"60px"}}>
-              <CardBody className="p-0">
+              {isLoged && (<h2>Você ja está logado!</h2>)}
+              {!isLoged && (<CardBody className="p-0">
                 <Form 
                   onSubmit={this.onSubmit} 
                   validate={initalValidate}
@@ -72,7 +86,7 @@ class Login extends Component {
                                   <label htmlFor="#senha">Senha*</label>
                                   <InputGroup className="mb-3">
                                     <InputGroupAddon type="prepend">
-                                      <InputGroupText><i class="fas fa-key"></i></InputGroupText>
+                                      <InputGroupText><i className="fas fa-key"></i></InputGroupText>
                                     </InputGroupAddon>
                                     <FormInput {...input} type="password" id="senha" placeholder="Digite sua senha" />     
                                   </InputGroup>
@@ -80,9 +94,13 @@ class Login extends Component {
                                 </FormGroup>
                               )}
                             </Field>
+                            {errorMessage && (<span className="d-flex required" style={{paddingBottom:"10px"}}>Usuario ou senha inválidos!</span>)}
                           </Col>
+                          
                           <Col lg="12" md="12">
-                            <button type="submit" className="btn btn-primary" style={{marginRight:"10px"}} disabled={submitting || pristine}>
+                          
+                            <button type="submit" className="btn btn-primary" style={{marginRight:"10px"}} >
+                            {/* disabled={submitting || pristine} */}
                               Login
                             </button>
                           </Col>
@@ -91,7 +109,7 @@ class Login extends Component {
                     )
                   }}
                 />
-              </CardBody>
+              </CardBody>)}
             </Card>
           </Col>
         </Row>

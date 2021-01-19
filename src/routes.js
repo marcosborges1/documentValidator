@@ -18,6 +18,7 @@ import UserInsert from "./views/UserInsert";
 import Files from "./views/Files";
 import FileInsert from "./views/FileInsert";
 import Login from "./views/Login"
+import Logout from "./views/Logout"
 import FilesValidator from "./views/FilesValidator"
 
 export default [
@@ -72,6 +73,11 @@ export default [
     path: "/login",
     exact: true,
     layout: Login
+  },
+  {
+    path: "/logout",
+    exact: true,
+    layout: Logout
   },
   {
     path: "/validacao",

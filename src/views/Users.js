@@ -14,8 +14,18 @@ class Users extends Component {
     data: []
   }
 
-  componentDidMount() {
-    UserAPI.listAll().then(data=> this.setState({data}))
+  async componentDidMount() {
+    
+    
+    const result = await UserAPI.isAutenticate()
+    
+    if(result.status==200) {
+      console.log(result.data[0].codigoUsuario)
+      UserAPI.listAll().then(data=> this.setState({data}))
+    }
+    else {
+      this.props.history.push("/login")
+    }
   }
   removeUser = (user,e) => {
 
