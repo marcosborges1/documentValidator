@@ -19,9 +19,13 @@ class Users extends Component {
     
     const result = await UserAPI.isAutenticate()
     
-    if(result.status==200) {
-      console.log(result.data[0].codigoUsuario)
-      UserAPI.listAll().then(data=> this.setState({data}))
+    if(result.status==200)  {
+      // console.log(result.data[0].codigoUsuario)
+      if(result.data[0].codigoUsuario==1) {
+        UserAPI.listAll().then(data=> this.setState({data}))
+      } else {
+        this.props.history.push("/errors")
+      }
     }
     else {
       this.props.history.push("/login")
@@ -83,7 +87,7 @@ class Users extends Component {
                           <td className="align-items-center">
                             <Link to={`usuarios/editar/${user.codigoUsuario}`} title="Editar Usuário" className="col-1"><i className="fas fa-edit"></i>
                             </Link>
-                            <a href="javascript:void(0);" onClick={(e)=>this.removeUser(user,e)} title="Excluir Usuário" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>
+                            {user.codigoUsuario!=1 && (<a href="javascript:void(0);" onClick={(e)=>this.removeUser(user,e)} title="Excluir Usuário" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>)}
                           </td>
                           <td>{user.nome}</td>
                           <td>{user.identificacao}</td>

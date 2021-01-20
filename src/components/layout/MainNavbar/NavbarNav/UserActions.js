@@ -18,7 +18,7 @@ export default class UserActions extends React.Component {
 
     this.state = {
       visible: false,
-      data: []
+      data:[],
     };
 
     this.toggleUserActions = this.toggleUserActions.bind(this);
@@ -26,17 +26,20 @@ export default class UserActions extends React.Component {
 
   async componentDidMount() {
 
-    try {
-      UserAPI.isAutenticate()
-    } catch (error) {
-      console.log("asd")
+      const result = await UserAPI.isAutenticate();
+      
+      // if(result.status==200) {
+      //   this.setState({codigoUsuario:result.data[0].codigoUsuario})
+      // }
+      // else {
+      //   this.props.history.push("/login")
+      // }
+    if(result.status==200) {
+      UserAPI.get(result.data[0].codigoUsuario).then(data=>this.setState({data:data[0]}));
     }
-    // if(result.data) {
-    //   UserAPI.get(result.data[0].codigoUsuario).then(data=>this.setState({data:data[0]}));
-    // }
-    // else {
-    //   console.log("Não logado.")
-    // }
+    else {
+      console.log("Não logado.")
+    }
 
   }
 
@@ -54,16 +57,13 @@ export default class UserActions extends React.Component {
         <DropdownToggle caret tag={NavLink} className="text-nowrap px-3">
           <img
             className="user-avatar rounded-circle mr-2"
-            src={require("./../../../../images/avatars/0.jpg")}
+            src={require("./../../../../images/avatars/4.png")}
             alt="User Avatar"
           />{" "}
           <span className="d-none d-md-inline-block">{data && (data.nome)}</span>
         </DropdownToggle>
         <Collapse tag={DropdownMenu} right small open={this.state.visible}>
-          <DropdownItem tag={Link} to="user-profile">
-            <i className="material-icons">&#xE7FD;</i> Perfil
-          </DropdownItem>
-          <DropdownItem tag={Link} to="edit-user-profile">
+          <DropdownItem tag={Link} to={`/usuarios/editar/${data.codigoUsuario}`}>
             <i className="material-icons">&#xE8B8;</i> Editar Perfil
           </DropdownItem>
           <DropdownItem tag={Link} to="/arquivos">

@@ -2,7 +2,9 @@ import React,{ Component } from "react";
 import { Container, Alert, Row, Col, Card, CardHeader, CardBody } from "shards-react";
 import {Link} from 'react-router-dom'
 import * as FileAPI from "../utils/FileAPI"
+import * as UserAPI from "../utils/UserAPI"
 import PageTitle from "../components/common/PageTitle";
+import "../assets/mycss.css";
 
 
 class Files extends Component {
@@ -11,8 +13,22 @@ class Files extends Component {
     data: []
   }
 
-  componentDidMount() {
-    FileAPI.listAll().then(data=> this.setState({data}))
+  async componentDidMount() {
+
+    const result = await UserAPI.isAutenticate()
+    
+    if(result.status==200) {
+      // console.log(result.data[0].codigoUsuario)
+      if(result.data[0].codigoUsuario==1) {
+        FileAPI.listAll().then(data=> this.setState({data}))
+      } else {
+        FileAPI.listByUser(result.data[0].codigoUsuario).then(data=> this.setState({data}))
+      }
+    }
+    else {
+      this.props.history.push("/login")
+    }
+    // FileAPI.listAll().then(data=> this.setState({data}))
   }
 
   removeFile = (file,e) => {
@@ -77,7 +93,7 @@ class Files extends Component {
                             <a href="javascript:void(0);" onClick={(e)=>this.removeFile(file,e)} title="Excluir Arquivo" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>
                           </td>
                           <td>{file.nome}</td>
-                          <td>{file.arquivo}</td>
+                          <td><a className="link_normal" href={file.url} title={file.nome}>{file.arquivo}</a></td>
                           <td><input type="text" value={file.cripto} onFocus={(e)=>e.target.select()} size="10"/></td>
                           <td>{file.codigoUsuario}</td>
                         </tr>

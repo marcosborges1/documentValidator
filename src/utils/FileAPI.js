@@ -15,6 +15,10 @@ export const listAll = () =>
   fetch(`${api}/listar${modulus}s`)
     .then(res => res.json())
 
+export const listByUser = (codigoUsuario) =>
+  fetch(`${api}/listarArquivosPorUsuario/${codigoUsuario}`)
+    .then(res => res.json())
+
 export const insert = (body) =>
   fetch(`${api}/inserir${modulus}`, {
     method: 'POST',

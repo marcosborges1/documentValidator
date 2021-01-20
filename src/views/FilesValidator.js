@@ -4,6 +4,7 @@ import { Form, Field } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
 import * as UserAPI from "../utils/UserAPI"
 import * as Validator from "../utils/Validator"
+import MainFooter from "../components/layout/MainFooter"
 
 class FilesValidator extends Component {
 
@@ -106,7 +107,12 @@ class FilesValidator extends Component {
               </CardBody>
             </Card>
           </Col>
+          <div style={{position:"fixed",bottom:0,width: "100%"}}>
+            <MainFooter/>
+          </div>
         </Row>
+        
+        
       </Container>
     )
   }

@@ -39,7 +39,7 @@ MainFooter.propTypes = {
 
 MainFooter.defaultProps = {
   contained: false,
-  copyright: "Copyright © 2021 Marcos Borges, based on Shards",
+  copyright: "Copyright © 2021 Marcos Borges",
   menuItems: [
     {
       title: "Início",

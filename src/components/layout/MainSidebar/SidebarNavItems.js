@@ -4,19 +4,40 @@ import { Nav } from "shards-react";
 import SidebarNavItem from "./SidebarNavItem";
 import { Store } from "../../../flux";
 
+import * as UserAPI from "../../../utils/UserAPI"
+
+
 class SidebarNavItems extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      navItems: Store.getSidebarItems()
+      navItems: null
     };
 
     this.onChange = this.onChange.bind(this);
   }
 
   componentWillMount() {
+        
     Store.addChangeListener(this.onChange);
+  }
+  async componentDidMount() {
+
+    const result = await UserAPI.isAutenticate()
+    if(result.status==200)  {
+      if(result.data[0].codigoUsuario==1) {
+        this.setState({navItems:[{
+          title: "Usuários",
+          to: "/usuarios",
+          htmlBefore: '<i class="fas fa-file-alt"></i>',
+          htmlAfter: ""
+        },...Store.getSidebarItems()]});
+      }
+      else {
+        this.setState({navItems:Store.getSidebarItems()})
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -35,7 +56,7 @@ class SidebarNavItems extends React.Component {
     return (
       <div className="nav-wrapper">
         <Nav className="nav--no-borders flex-column">
-          {items.map((item, idx) => (
+          {items && items.map((item, idx) => (
             <SidebarNavItem key={idx} item={item} />
           ))}
         </Nav>

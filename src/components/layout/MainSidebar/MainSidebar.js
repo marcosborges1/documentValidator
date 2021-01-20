@@ -15,7 +15,8 @@ class MainSidebar extends React.Component {
 
     this.state = {
       menuVisible: false,
-      sidebarNavItems: Store.getSidebarItems()
+      // sidebarNavItems: Store.getSidebarItems()
+      sidebarNavItems: null
     };
 
     this.onChange = this.onChange.bind(this);
@@ -33,7 +34,7 @@ class MainSidebar extends React.Component {
     this.setState({
       ...this.state,
       menuVisible: Store.getMenuState(),
-      sidebarNavItems: Store.getSidebarItems()
+      sidebarNavItems: null
     });
   }
 

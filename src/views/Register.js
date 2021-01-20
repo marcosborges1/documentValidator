@@ -7,8 +7,9 @@ import * as UserAPI from "../utils/UserAPI"
 import * as Validator from "../utils/Validator"
 
 import "../assets/mycss.css";
+import MainFooter from "../components/layout/MainFooter"
 
-class UserInsert extends Component {
+class Register extends Component {
 
   state = {
     dataUsers: {
@@ -21,41 +22,10 @@ class UserInsert extends Component {
 
   onSubmit = async (values) => {
     
-    const {codigoUsuario} = this.props.match.params;
-
-    if(!codigoUsuario) {
-      UserAPI.insert(values);
-      //Mensagem
-    }
-    else {
-      UserAPI.update(codigoUsuario, values)
-      //Mensagem
-    }
-    this.props.history.push('/usuarios')
-  }
-
-  async componentDidMount() {
-
-    const {codigoUsuario} = this.props.match.params;
-    const result = await UserAPI.isAutenticate();
+    await UserAPI.insert(values).then(result => this.props.history.push('/login'));
     
-    if(codigoUsuario == result.data[0].codigoUsuario) {
-      
-      UserAPI.get(codigoUsuario).then(res=>{
-
-        if(typeof res !== 'undefined' && res.length > 0) {
-          console.log("Tem conteudo")
-          this.setState({dataUsers:res[0]})
-        } else {
-          console.log("Não")
-        }
-
-      }).catch(error=>console.log(error.message))
-    }
-    else {
-      this.props.history.push("/errors");
-    }
   }
+
 
   render() {
     
@@ -63,12 +33,12 @@ class UserInsert extends Component {
       <Container fluid className="main-content-container px-4">
         {/* Page Header */}
         <Row noGutters className="page-header py-4">
-          <PageTitle sm="4" title="Inserir" subtitle="Usuário" className="text-sm-left" />
+          <PageTitle sm="4" title="Cadastrar-se" subtitle="Usuário" className="text-sm-left" />
         </Row>
 
         {/* Default Light Table */}
-        <Row>
-          <Col>
+        <Row className="justify-content-center">
+        <Col lg="8" md="8" xs="8">
             <Card small className="mb-4">
               <CardHeader className="border-bottom">
                 <h6 className="m-0"><i style={{color:"#007BFF"}} className="fas fa-exclamation-triangle"></i> Preencha os campos abaixo. Campos Obrigatórios(*)</h6>
@@ -141,7 +111,11 @@ class UserInsert extends Component {
               </CardBody>
             </Card>
           </Col>
+          <div style={{position:"fixed",bottom:0,width: "100%"}}>
+            <MainFooter/>
+          </div>
         </Row>
+       
       </Container>
     )
   }
@@ -157,4 +131,4 @@ const initalValidate = (values) => {
 	return errors;
 }
 
-export default UserInsert;
+export default Register;

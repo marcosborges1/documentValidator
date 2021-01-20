@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, CardHeader, FormGroup, FormInput, CardBody }
 import { Form, Field,FieldProps  } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
 import * as FileAPI from "../utils/FileAPI"
+import * as UserAPI from "../utils/UserAPI"
 import * as Validator from "../utils/Validator"
 import "../assets/mycss.css";
 const path = require('path');
@@ -16,7 +17,7 @@ class FileInsert extends Component {
       nome: "",
       arquivo: "",
       arquivoAtual:"",
-      codigoUsuario:5,
+      codigoUsuario:0,
       showArquivo:false
   }
 
@@ -33,14 +34,11 @@ class FileInsert extends Component {
     formData.append('codigoUsuario',this.state.codigoUsuario);
 
     if(!codigoArquivo) {
-      
-      // formData.append('nome',this.state.nome);
-      // formData.append('arquivo',this.state.arquivo);
-      // formData.append('codigoUsuario',this.state.codigoUsuario);
 
       axios.post("http://localhost:4000/inserirArquivo",formData,config)
         .then((response) => {
             console.log("The file is successfully uploaded");
+            this.props.history("/arquivos");
         }).catch((error) => {});
     }
     else {
@@ -99,6 +97,8 @@ class FileInsert extends Component {
   // }
 
   async componentDidMount() {
+
+    await UserAPI.isAutenticate().then(result=>this.setState({codigoUsuario:result.data[0].codigoUsuario}));
 
     const {codigoArquivo} = this.props.match.params;
 
@@ -170,7 +170,7 @@ class FileInsert extends Component {
                     <Col lg="12" md="12">
                       <FormGroup>
                         <label htmlFor="#nome">Nome*</label>
-                        <input type="text" name="nome" className="form-control" placeholder="Digite seu nome completo" value={nome} onChange= {(e)=>this.setState({nome:e.target.value})} />
+                        <input type="text" name="nome" className="form-control" placeholder="Digite o nome do arquivo" value={nome} onChange= {(e)=>this.setState({nome:e.target.value})} />
                       </FormGroup>
                       <FormGroup>
                         <label htmlFor="#arquivo">Arquivo*<i> (Somente: pdf, jpeg e png)</i></label><br/>

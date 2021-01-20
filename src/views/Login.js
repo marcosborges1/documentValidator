@@ -1,11 +1,13 @@
 import React, {Component} from "react";
 import { Container, InputGroup,
   InputGroupAddon,
-  InputGroupText,Row, Col, Card, CardHeader, FormGroup, FormInput, CardBody } from "shards-react";
+  InputGroupText,Row, Col, Card, FormGroup, FormInput, CardBody } from "shards-react";
 import { Form, Field } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
 import * as UserAPI from "../utils/UserAPI"
 import * as Validator from "../utils/Validator"
+import {Link} from 'react-router-dom'
+import MainFooter from "../components/layout/MainFooter"
 
 class Login extends Component {
 
@@ -33,7 +35,7 @@ class Login extends Component {
     
     if(result.data["auth"])  {
       localStorage.token = result.data["token"];
-      this.props.history.push('/')
+      this.props.history.push('/arquivos')
     }
     else {
         this.setState({errorMessage:true})
@@ -103,6 +105,7 @@ class Login extends Component {
                             {/* disabled={submitting || pristine} */}
                               Login
                             </button>
+                            <Link to="/cadastrar-se" style={{float:"right",marginTop:"10px"}}>Cadastre-se</Link>
                           </Col>
                         </Row>
                       </form>
@@ -112,8 +115,14 @@ class Login extends Component {
               </CardBody>)}
             </Card>
           </Col>
+          <div style={{position:"fixed",bottom:0,width: "100%"}}>
+            <MainFooter/>
+          </div>
         </Row>
+        
+        
       </Container>
+      
     )
   }
 }

@@ -20,13 +20,14 @@ import FileInsert from "./views/FileInsert";
 import Login from "./views/Login"
 import Logout from "./views/Logout"
 import FilesValidator from "./views/FilesValidator"
+import Register from "./views/Register";
+import Index from "./views/Index";
 
 export default [
   {
     path: "/",
     exact: true,
-    layout: DefaultLayout,
-    component: () => <Redirect to="/usuarios" />
+    layout: Index
   },
   {
     path: "/errors",
@@ -83,6 +84,11 @@ export default [
     path: "/validacao",
     exact: true,
     layout: FilesValidator
+  },
+  {
+    path: "/cadastrar-se",
+    exact: true,
+    layout: Register
   },
 
 

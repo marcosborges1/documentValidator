@@ -9,3 +9,7 @@
 .other_choice {
     margin-left: 10px;
 }
+.link_normal:hover {
+   
+    text-decoration: underline !important;
+}
