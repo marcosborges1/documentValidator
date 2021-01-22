@@ -20,14 +20,14 @@ class Login extends Component {
     isLoged:false
   }
   async componentDidMount() {
-    
-    const result = await UserAPI.isAutenticate()
-    if(result.status==200) {
-      this.setState({isLoged:true})
-    }
-    else {
-      this.setState({isLoged:false})
-    }
+    const result = await UserAPI.isAutenticate().then(result=>{
+      if(result.status==200) {
+        this.setState({isLoged:true})
+      }
+      else {
+        this.setState({isLoged:false})
+      }
+    }).catch(error=>console.error(error));
   }
   onSubmit = async (values) => {
 
