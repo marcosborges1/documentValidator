@@ -38,8 +38,8 @@ class UserInsert extends Component {
 
     const {codigoUsuario} = this.props.match.params;
     const result = await UserAPI.isAutenticate();
-    
-    if(codigoUsuario == result.data[0].codigoUsuario) {
+
+    if(codigoUsuario === result.data[0].codigoUsuario) {
       
       UserAPI.get(codigoUsuario).then(res=>{
 

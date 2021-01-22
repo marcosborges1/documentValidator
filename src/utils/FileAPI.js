@@ -1,5 +1,6 @@
 const api = process.env.FILE_API_URL || 'http://localhost:4000'
 const modulus = "Arquivo"
+const axios = require("axios")
 // let token = localStorage.token
 
 // if (!token)
@@ -52,6 +53,78 @@ export const get = (codigoArquivo) =>
             // headers 
         })
     .then(res => res.json())
+
+export const isFileOnDB = (body) =>
+  fetch(`${api}/verificar${modulus}`, {
+    method: 'POST',
+    headers: {
+    //   ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }).then(res => res.json())
+
+export const validateFile = (body) => {
+
+  const options = {
+    url: `${api}/validacao`,
+    timeout: 10000,
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: {
+      ...body
+    }
+  };
+  return axios(options)
+  .then(response => {
+    return response;
+  });
+
+}
+
+  // fetch(`${api}/validacao`, {
+  //   method: 'POST',
+  //   headers: {
+  //   //   ...headers,
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(body)
+  // }).then(res => res.json())
+
+  export const getValidations = (body) => {
+    // return fetch(`${api}/validacoesPor${modulus}`, {
+    //   method: 'POST',
+    //   headers: {
+    //   //   ...headers,
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(body)
+    // }).then(res => res.json())
+
+    const options = {
+      url: `${api}/validacoesPor${modulus}`,
+      timeout: 2000,
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      data: {
+        ...body
+      }
+    };
+    return axios(options)
+    .then(response => {
+      return response;
+    });
+
+  }
+  export const validationNegative = (body) => {
+
+  }
 
 // export const create = (body) =>
 //   fetch(`${api}/contacts`, {

@@ -10,7 +10,8 @@ import "../assets/mycss.css";
 class Files extends Component {
     
   state = {
-    data: []
+    data: [],
+    loading:true,
   }
 
   async componentDidMount() {
@@ -18,17 +19,25 @@ class Files extends Component {
     const result = await UserAPI.isAutenticate()
     
     if(result.status==200) {
-      // console.log(result.data[0].codigoUsuario)
+      let PromiseUser;
       if(result.data[0].codigoUsuario==1) {
-        FileAPI.listAll().then(data=> this.setState({data}))
+        PromiseUser = FileAPI.listAll();
       } else {
-        FileAPI.listByUser(result.data[0].codigoUsuario).then(data=> this.setState({data}))
+        PromiseUser = FileAPI.listByUser(result.data[0].codigoUsuario)
       }
+      const dados = await PromiseUser.then(data => { 
+        data.map( async (d) => {
+          d.positivo = await FileAPI.getValidations({arquivo:`${d.arquivo}`, tipo:'positivo' }).then(res=>{ console.log("as"); return res.data} );  
+          d.negativo = await FileAPI.getValidations({arquivo:`${d.arquivo}`, tipo:'negativo' }).then(res=>{ console.log("as"); return res.data} );  
+        })
+        return data
+      });
+      await sleep(1500)  
+      this.setState({data:dados, loading:false});
     }
     else {
       this.props.history.push("/login")
     }
-    // FileAPI.listAll().then(data=> this.setState({data}))
   }
 
   removeFile = (file,e) => {
@@ -40,12 +49,12 @@ class Files extends Component {
     )
 	}
 
-  render () {
+  render() {
 
-    const {data} = this.state;
-
+    const {data, loading} = this.state;
+    
     return (
-      <Container fluid className="main-content-container px-4">
+      <Container fluid className="main-content-container px-4" id="main_">
         {/* Page Header */}
         <Row noGutters className="page-header py-4">
           <PageTitle sm="4" title="Lista" subtitle="Arquivos" className="text-sm-left" />
@@ -61,8 +70,9 @@ class Files extends Component {
               </Link>  
               </CardHeader>
               <CardBody className="p-0 pb-3">
-                {data.length==0 && (<Alert theme="light" style={{textAlign:"center"}}><i className="fas fa-exclamation-triangle"></i> Não existem Arquivos cadastrados!</Alert>)}
-                {data.length>0 &&
+                {loading && (<Alert theme="primary" style={{textAlign:"center"}}>... Carregando Dados!</Alert>)}
+                {!loading && data && data.length==0 && (<Alert theme="light" style={{textAlign:"center"}}><i className="fas fa-exclamation-triangle"></i> Não existem Arquivos cadastrados!</Alert>)}
+                {data && data.length>0 &&
                 (<table className="table mb-0 table-hover">
                   <thead className="bg-light">
                     <tr>
@@ -81,6 +91,9 @@ class Files extends Component {
                       <th scope="col" className="border-0">
                         Usuário
                       </th>
+                      <th scope="col" className="border-0">
+                        Validações
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -96,6 +109,7 @@ class Files extends Component {
                           <td><a className="link_normal" href={file.url} title={file.nome}>{file.arquivo}</a></td>
                           <td><input type="text" value={file.cripto} onFocus={(e)=>e.target.select()} size="10"/></td>
                           <td>{file.codigoUsuario}</td>
+                          <td><i style={{color:"green", fontSize:"14px"}} className="far fa-thumbs-up">({file.positivo})</i>&nbsp;&nbsp;<i style={{color:"red", fontSize:"14px"}} className="far fa-thumbs-down">({file.negativo})</i>&nbsp;&nbsp;&nbsp;<a style={{fontSize:"14px"}} href={`http://localhost:4000/log/${file.arquivo}`}><i class="fas fa-file-alt"></i></a></td>
                         </tr>
                       )
                     )}
@@ -107,8 +121,15 @@ class Files extends Component {
           </Col>
         </Row>
       </Container>
-    );
+    )
   }
-}    
+} 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+// const getCountValidations = async (body) => {
+//   // const body = {arquivo, tipo}
+//   const result =  await FileAPI.getValidations(body)
+//   return result;
+//   // return (<span>${[result]}</span>);
+// }
 
 export default Files;
