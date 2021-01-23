@@ -1,16 +1,6 @@
 const api = process.env.FILE_API_URL || 'http://ec2-3-94-190-164.compute-1.amazonaws.com:4000'
 const modulus = "Arquivo"
 const axios = require("axios")
-// let token = localStorage.token
-
-// if (!token)
-//   token = localStorage.token = Math.random().toString(36).substr(-8)
-
-// const headers = {
-//   'Accept': 'application/json',
-//   'Authorization': token
-// }
-
 
 export const listAll = () =>
   fetch(`${api}/listar${modulus}s`)
@@ -23,11 +13,6 @@ export const listByUser = (codigoUsuario) =>
 export const insert = (body) =>
   fetch(`${api}/inserir${modulus}`, {
     method: 'POST',
-    // headers: {
-    // //   ...headers,
-    //   // 'Content-Type': 'application/json'
-    //   'content-type': 'multipart/form-data'
-    // },
     body: body
   })
 
@@ -35,7 +20,6 @@ export const insert = (body) =>
   fetch(`${api}/atualizar${modulus}/${codigoArquivo}`, {
     method: 'PUT',
     headers: {
-    //   ...headers,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
@@ -56,11 +40,7 @@ export const remove = (data) =>  {
     return response;
   });
 }
-  // fetch(`${api}/excluir${modulus}/${data.codigoArquivo}`, { 
-  //       method: 'DELETE'
-  //       // headers 
-  //   })
-  //   .then(res => res.json())
+
 export const get = (codigoArquivo) => 
     fetch(`${api}/obter${modulus}/${codigoArquivo}`, { 
             method: 'GET'
@@ -98,54 +78,21 @@ export const validateFile = (body) => {
   });
 
 }
-
-  // fetch(`${api}/validacao`, {
-  //   method: 'POST',
-  //   headers: {
-  //   //   ...headers,
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify(body)
-  // }).then(res => res.json())
-
-  export const getValidations = (body) => {
-    // return fetch(`${api}/validacoesPor${modulus}`, {
-    //   method: 'POST',
-    //   headers: {
-    //   //   ...headers,
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(body)
-    // }).then(res => res.json())
-
-    const options = {
-      url: `${api}/validacoesPor${modulus}`,
-      timeout: 2000,
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
-      data: {
-        ...body
-      }
-    };
-    return axios(options)
-    .then(response => {
-      return response;
-    });
-
-  }
-  export const validationNegative = (body) => {
-
-  }
-
-// export const create = (body) =>
-//   fetch(`${api}/contacts`, {
-//     method: 'POST',
-//     headers: {
-//       ...headers,
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(body)
-//   }).then(res => res.json())
+export const getValidations = (body) => {
+  const options = {
+    url: `${api}/validacoesPor${modulus}`,
+    timeout: 2000,
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: {
+      ...body
+    }
+  };
+  return axios(options)
+  .then(response => {
+    return response;
+  });
+}

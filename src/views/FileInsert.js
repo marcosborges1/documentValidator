@@ -11,8 +11,6 @@ import "../assets/mycss.css";
 const path = require('path');
 const axios = require("axios");
 
-// import ArrowBack from "../components/common/ArrowBack";
-
 class FileInsert extends Component {
 
   state = {
@@ -30,7 +28,7 @@ class FileInsert extends Component {
     const {history, notification} = this.props
     const {codigoArquivo} = this.props.match.params;
     const formData = new FormData();
-    const config = {headers: {'content-type': 'multipart/form-data'}};
+    const config = {timeout: 6000,headers: {'content-type': 'multipart/form-data'}};
 
     formData.append('nome',this.state.nome);
     formData.append('arquivo',this.state.arquivo);
@@ -38,7 +36,7 @@ class FileInsert extends Component {
 
     if(!codigoArquivo) {
 
-      await axios.post("http://localhost:4000/inserirArquivo",formData,config)
+      await axios.post("http://ec2-3-94-190-164.compute-1.amazonaws.com:4000/inserirArquivo",formData,config)
         .then((response) => {
             console.log("Arquivo feito upload com sucesso!");
             notification.success('Arquivo inserido com sucesso!', null, 2000);
@@ -50,55 +48,13 @@ class FileInsert extends Component {
       formData.append('arquivoAtual',this.state.arquivoAtual); 
       // console.log(this.state.arquivoAtual)
       // console.log(this.state.arquivo)
-      axios.put(`http://localhost:4000/atualizarArquivo/${codigoArquivo}`,formData,config)
+      axios.put(`http://ec2-3-94-190-164.compute-1.amazonaws.com:4000/${codigoArquivo}`,formData,config)
         .then((response) => {
           notification.success('Arquivo atualizado com sucesso!', null, 2000);
           history.push("/arquivos");
         }).catch((error) => {});
     }
   }
-  
-  // onSubmit = async (values) => {
-    
-  //   console.log(values);
-  //   const defaultValues = {codigoUsuario: 5}
-
-  //   const formData = new FormData();
-  //   formData.append("nome", values.nome);
-  //   formData.append("arquivo", values.arquivo);
-    
-  //   return await fetch("http://localhost:4000/inserirArquivo", {
-  //     method: "POST",
-  //     headers: {
-  //       'content-type': 'multipart/form-data;boundary=something'
-  //     },
-  //     body: formData,
-  //   })
-
-    
-
-
-    // console.log(values.arquivo[0].name)
-    // console.log(values.arquivo);
-    // values.arquivo = values.arquivo[0].name
-    // values.cripto = Crypto.encrypt(values.arquivo[0].name);
-
-    // const {codigoArquivo} = this.props.match.params;
-
-    // if(!codigoArquivo) {
-      
-      // FileAPI.insert({...defaultValues,...values});
-    // FileAPI.insert(formData);
-    //   //Mensagem
-    // }
-    // else {
-      
-    //   console.log({...defaultValues,...values});
-    //   FileAPI.update(codigoArquivo, {...defaultValues,...values})
-    //   //Mensagem
-    // }
-    // this.props.history.push('/arquivos')
-  // }
 
   async componentDidMount() {
 
@@ -133,23 +89,6 @@ class FileInsert extends Component {
     if (!values.arquivo) {errors.arquivo = "Campo Obrigatório";}
     return errors;
   }
-
-//   onFormSubmit = (e)=> {
-//     e.preventDefault();
-//         const formData = new FormData();
-//         formData.append('myImage',this.state.file);
-//         const config = {
-//             headers: {
-//                 'content-type': 'multipart/form-data'
-//             }
-//         };
-//     // console.log(formData.values)
-//     axios.post("http://localhost:4000/inserirArquivo",formData,config)
-//         .then((response) => {
-//             alert("The file is successfully uploaded");
-//         }).catch((error) => {
-//     });
-// }
 
   render () {
     const {nome, arquivo, codigoUsuario, codigoArquivo, showArquivo} = this.state;
@@ -193,58 +132,6 @@ class FileInsert extends Component {
                     </Col>
                   </Row>
                 </form>
-                {/* <Form 
-                  onSubmit={this.onSubmit} 
-                  validate={this.initalValidate}
-                  initialValues={this.state.dataFiles} 
-                  render={({ handleSubmit, pristine, reset, submitting, values }) => {
-                    return (
-                      <form onSubmit={handleSubmit}>
-                        <Row className="p-4 pb-3">
-                          <Col lg="6" md="6">  
-                            <Field name="nome" validate={Validator.composeValidators(Validator.required, Validator.minCharNormal)}>
-                              {({ input, meta }) => (
-                                <FormGroup>
-                                  <label htmlFor="#nome">Nome*</label>
-                                  <FormInput {...input} id="#nome" placeholder="Digite seu nome completo" />     
-                                  {meta.error && meta.touched && <span className="required">{meta.error}</span>}
-                                </FormGroup>
-                              )}
-                            </Field>
-                            <Field name="arquivo">
-                              {({ input: { value, onChange, ...input } }) => {
-                                const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-                                  onChange(target.files) // instead of the default target.value
-                                }
-                                return <input {...input} type="file" onChange={handleChange} />
-                              }}
-                            </Field> */}
-                            {/* <Field name="arquivo">
-                              {({ input, meta }) => (
-                                <FormGroup>
-                                  <label htmlFor="#arquivo">Arquivo*</label>
-                                  <FormInput {...input} type="file" id="arquivo" onChange={this.onChange} /> 
-                                  {meta.error && meta.touched && <span className="required">{meta.error}</span>}
-                                </FormGroup>
-                              )}
-                            </Field> */}
-                          {/* </Col>
-                          
-                          <Col lg="12"className="p-3" md="12">
-                            <button type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}} disabled={submitting || pristine}>
-                              Salvar
-                            </button>
-                            <button
-                              type="button" className="btn btn-warning"
-                              onClick={reset}
-                              disabled={submitting || pristine}>
-                              Limpar
-                            </button>
-                          </Col>
-                        </Row>
-                      </form> 
-                    )
-                  }} /> */}
               </CardBody>
             </Card>
           </Col>

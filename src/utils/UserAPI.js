@@ -10,7 +10,6 @@ export const insert = (body) =>
   fetch(`${api}/inserir${modulus}`, {
     method: 'POST',
     headers: {
-    //   ...headers,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
@@ -20,7 +19,6 @@ export const insert = (body) =>
   fetch(`${api}/atualizar${modulus}/${codigoUsuario}`, {
     method: 'PUT',
     headers: {
-    //   ...headers,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
@@ -29,13 +27,11 @@ export const insert = (body) =>
 export const remove = (data) =>
   fetch(`${api}/excluir${modulus}/${data.codigoUsuario}`, { 
         method: 'DELETE'
-        // headers 
     })
     .then(res => res.json())
 export const get = (codigoUsuario) => 
     fetch(`${api}/obter${modulus}/${codigoUsuario}`, { 
             method: 'GET'
-            // headers 
         })
     .then(res => res.json())
 
@@ -98,23 +94,4 @@ export const isAutenticate = () => {
     return response;
   }).catch(error=>error.response);
   
-    // {
-    // return fetch(`${api}/clientes`,{
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //     // 'x-access-token': body
-    //   },
-    //   mode: 'cors'
-      
-    // })
-    // .then(res => res.json())
-  }
-// export const create = (body) =>
-//   fetch(`${api}/contacts`, {
-//     method: 'POST',
-//     headers: {
-//       ...headers,
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(body)
-//   }).then(res => res.json())
+}
