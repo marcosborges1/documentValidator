@@ -13,8 +13,8 @@ class Login extends Component {
 
   state = {
     dataUsers: {
-      email: "marcia.borges@gmail.com",
-      senha: "senhadamarcia"
+      email: "",
+      senha: ""
     },
     errorMessage: false,
     isLoged:false
