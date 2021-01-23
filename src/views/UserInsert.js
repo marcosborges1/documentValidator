@@ -24,16 +24,23 @@ class UserInsert extends Component {
   onSubmit = async (values) => {
     
     const {codigoUsuario} = this.props.match.params;
+    const result = await UserAPI.isAutenticate();
+    const user = await UserAPI.get(result.data[0].codigoUsuario)
+    const {notification, history} = this.props;
 
     if(!codigoUsuario) {
       UserAPI.insert(values);
-      //Mensagem
+      notification.success('Usuário cadastrado com sucesso!', null, 2000);
     }
     else {
       UserAPI.update(codigoUsuario, values)
-      //Mensagem
+      notification.success('Usuário alterado com sucesso!', null, 2000);
     }
-    this.props.history.push('/usuarios')
+    if(user[0].tipo==1) {
+      history.push('/usuarios')
+    } else {
+      history.push('/arquivos')
+    }
   }
 
   async componentDidMount() {
