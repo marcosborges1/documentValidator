@@ -1,4 +1,4 @@
-const api = process.env.USER_API_URL || 'http://localhost:4000'
+const api = process.env.USER_API_URL || 'http://ec2-18-206-147-45.compute-1.amazonaws.com:4000'
 const modulus = "Usuario"
 const axios = require("axios")
 

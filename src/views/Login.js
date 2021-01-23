@@ -21,6 +21,7 @@ class Login extends Component {
   }
   async componentDidMount() {
     await UserAPI.isAutenticate().then(result => {
+      
       if(result.status==200) {
         this.setState({isLoged:true})
       }
