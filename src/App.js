@@ -21,7 +21,7 @@ export default () => (
             
             component={withTracker(props => {
               return (
-                <route.layout {...props}>
+                <route.layout notification={NotificationManager} {...props}>
                   <route.component notification={NotificationManager} {...props} />
                 </route.layout>
               );

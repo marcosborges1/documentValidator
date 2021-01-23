@@ -20,22 +20,25 @@ class Login extends Component {
     isLoged:false
   }
   async componentDidMount() {
-    const result = await UserAPI.isAutenticate().then(result=>{
+    const result = await UserAPI.isAutenticate()
       if(result.status==200) {
         this.setState({isLoged:true})
       }
       else {
         this.setState({isLoged:false})
       }
-    }).catch(error=>console.error(error));
+    // }).catch(error=>console.error(error));
   }
   onSubmit = async (values) => {
 
     const result = await UserAPI.login(values);
+    const {notification, history} = this.props;
+    console.log(this.props)
     
     if(result.data["auth"])  {
       localStorage.token = result.data["token"];
-      this.props.history.push('/arquivos')
+      notification.success('Login realizado com sucesso!', null, 2000);
+      history.push('/arquivos')
     }
     else {
         this.setState({errorMessage:true})
