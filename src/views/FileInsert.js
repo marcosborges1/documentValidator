@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import 'react-notifications/lib/notifications.css';
 import { Container, Row, Col, Card, CardHeader, FormGroup, FormInput, CardBody } from "shards-react";
 import { Form, Field,FieldProps  } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
@@ -6,6 +7,7 @@ import * as FileAPI from "../utils/FileAPI"
 import * as UserAPI from "../utils/UserAPI"
 import * as Validator from "../utils/Validator"
 import "../assets/mycss.css";
+
 const path = require('path');
 const axios = require("axios");
 
@@ -21,10 +23,11 @@ class FileInsert extends Component {
       showArquivo:false
   }
 
-  onFormSubmit = (e) => {
+  onFormSubmit = async (e) => {
     
     e.preventDefault();
 
+    const {history, notification} = this.props
     const {codigoArquivo} = this.props.match.params;
     const formData = new FormData();
     const config = {headers: {'content-type': 'multipart/form-data'}};
@@ -35,10 +38,11 @@ class FileInsert extends Component {
 
     if(!codigoArquivo) {
 
-      axios.post("http://localhost:4000/inserirArquivo",formData,config)
+      await axios.post("http://localhost:4000/inserirArquivo",formData,config)
         .then((response) => {
-            console.log("The file is successfully uploaded");
-            this.props.history("/arquivos");
+            console.log("Arquivo feito upload com sucesso!");
+            notification.success('Arquivo inserido com sucesso!', null, 2000);
+            history.push("/arquivos");
         }).catch((error) => {});
     }
     else {
@@ -48,10 +52,10 @@ class FileInsert extends Component {
       // console.log(this.state.arquivo)
       axios.put(`http://localhost:4000/atualizarArquivo/${codigoArquivo}`,formData,config)
         .then((response) => {
-            console.log("The file is successfully uploaded");
+          notification.success('Arquivo atualizado com sucesso!', null, 2000);
+          history.push("/arquivos");
         }).catch((error) => {});
     }
-    
   }
   
   // onSubmit = async (values) => {
@@ -249,5 +253,5 @@ class FileInsert extends Component {
     )
   }
 }
-
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default FileInsert;

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 // import { Container, Row, Col, Card, CardHeader, CardBody,Form, FormInput, FormGroup, Button } from "shards-react";
-import { Container, Row, Col, Card, CardHeader, FormGroup, FormInput, CardBody } from "shards-react";
+import { Container, Row, Col, Card, CardHeader, FormGroup, FormInput, FormSelect, CardBody } from "shards-react";
 import { Form, Field } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
 import * as UserAPI from "../utils/UserAPI"
@@ -15,8 +15,10 @@ class UserInsert extends Component {
       nome: "",
       identificacao: "",
       email: "",
-      senha: ""
+      senha: "",
+      tipo: 0,
     }
+    ,autorizacaoTipo:false
   }
 
   onSubmit = async (values) => {
@@ -38,27 +40,33 @@ class UserInsert extends Component {
 
     const {codigoUsuario} = this.props.match.params;
     const result = await UserAPI.isAutenticate();
-
-    if(codigoUsuario === result.data[0].codigoUsuario) {
+    if(result.status==200) { 
+      const user = await UserAPI.get(result.data[0].codigoUsuario)
       
-      UserAPI.get(codigoUsuario).then(res=>{
+      if(codigoUsuario === result.data[0].codigoUsuario || user[0].tipo==1) {
+        
+        this.setState({autorizacaoTipo:user[0].tipo==1?true:false});
+        UserAPI.get(codigoUsuario).then(res=>{
 
-        if(typeof res !== 'undefined' && res.length > 0) {
-          console.log("Tem conteudo")
-          this.setState({dataUsers:res[0]})
-        } else {
-          console.log("Não")
-        }
+          if(typeof res !== 'undefined' && res.length > 0) {
+            console.log("Tem conteudo")
+            this.setState({dataUsers:res[0]})
+          } else {
+            console.log("Não")
+          }
 
-      }).catch(error=>console.log(error.message))
-    }
-    else {
-      this.props.history.push("/errors");
+        }).catch(error=>console.log(error.message))
+      }
+      else {
+        this.props.history.push("/errors");
+      }
     }
   }
 
   render() {
     
+    const {autorizacaoTipo} = this.state;
+
     return (
       <Container fluid className="main-content-container px-4">
         {/* Page Header */}
@@ -98,6 +106,18 @@ class UserInsert extends Component {
                               <FormGroup>
                                 <label htmlFor="#identificacao">Identificação*</label>
                                 <FormInput {...input} id="#identificacao" placeholder="Digite sua identificação" />     
+                                {meta.error && meta.touched && <span className="required">{meta.error}</span>}
+                              </FormGroup>
+                            )}
+                          </Field>
+                          <Field name="tipo">
+                            {({ input, meta }) => (
+                              <FormGroup>
+                                <label htmlFor="#Tipo">Tipo de Usuário*</label>
+                                <FormSelect {...input}>
+                                  <option value="0">Normal</option>
+                                  <option value="1" disabled={!autorizacaoTipo ? 'disabled' : null}>Administrador</option>
+                                </FormSelect>     
                                 {meta.error && meta.touched && <span className="required">{meta.error}</span>}
                               </FormGroup>
                             )}

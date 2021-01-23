@@ -36,14 +36,17 @@ class Files extends Component {
       this.setState({data:dados, loading:false});
     }
     else {
-      this.props.history.push("/login")
+      this.props.history.push("/login");
     }
   }
 
   removeFile = (file,e) => {
 
+    const {notification} = this.props;
     e.preventDefault();
-    FileAPI.remove(file).then(data=> console.log(data))
+    FileAPI.remove(file).then(data=> {
+      notification.success('Arquivo deletado com sucesso!', null, 2000);
+    })
     this.setState(
       {data:this.state.data.filter(res=>res.codigoArquivo!=file.codigoArquivo)}
     )
@@ -113,7 +116,6 @@ class Files extends Component {
                         </tr>
                       )
                     )}
-                    
                   </tbody>
                 </table>)}
               </CardBody>

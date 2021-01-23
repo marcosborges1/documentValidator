@@ -1,16 +1,6 @@
 const api = process.env.USER_API_URL || 'http://localhost:4000'
 const modulus = "Usuario"
 const axios = require("axios")
-// let token = localStorage.token
-// console.log(token)
-// if (!token)
-//   token = localStorage.token = Math.random().toString(36).substr(-8)
-
-// const headers = {
-//   'Accept': 'application/json',
-//   'Authorization': token
-// }
-
 
 export const listAll = () =>
   fetch(`${api}/listar${modulus}s`)
@@ -50,17 +40,6 @@ export const get = (codigoUsuario) =>
     .then(res => res.json())
 
 export const login = (body) => {
-    // fetch(`${api}/login`, { 
-    //     method: 'POST',
-    //     headers: {
-    //       //   ...headers,
-    //         'Content-Type': 'application/json',
-    //          credentials: "same-origin"
-    //       },
-    //       mode: 'cors',
-    //       body: JSON.stringify(body)
-    // })
-    // .then(res => res.json())
     const options = {
       url: `${api}/login`,
       timeout: 4000,
@@ -78,6 +57,26 @@ export const login = (body) => {
       return response;
     });
 }
+
+export const verifyEmail = (body) => {
+  const options = {
+    url: `${api}/verificarEmail`,
+    timeout: 4000,
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data: {
+      ...body
+    }
+  };
+  return axios(options)
+  .then(response => {
+    return response;
+  });
+}
+
 export const logout = () => {
   localStorage.removeItem("token")
   return fetch(`${api}/logout`)

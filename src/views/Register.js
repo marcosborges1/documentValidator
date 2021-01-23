@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 // import { Container, Row, Col, Card, CardHeader, CardBody,Form, FormInput, FormGroup, Button } from "shards-react";
-import { Container, Row, Col, Card, CardHeader, FormGroup, FormInput, CardBody } from "shards-react";
+import { Container, Row, Alert, Button, Col, Card, CardHeader, FormGroup, FormInput, CardBody } from "shards-react";
 import { Form, Field } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
 import * as UserAPI from "../utils/UserAPI"
 import * as Validator from "../utils/Validator"
+import {Link} from 'react-router-dom'
 
 import "../assets/mycss.css";
 import MainFooter from "../components/layout/MainFooter"
@@ -17,17 +18,30 @@ class Register extends Component {
       identificacao: "",
       email: "",
       senha: ""
-    }
+    },
+    informationSuccess:false,
+    errorMessage:false
   }
 
   onSubmit = async (values) => {
     
-    await UserAPI.insert(values).then(result => this.props.history.push('/login'));
-    
+    await UserAPI.verifyEmail({email:values.email}).then(result=> {
+      if(result.data.exist) {
+        this.setState({errorMessage:true});
+      }
+      else {
+        this.setState({errorMessage:false});
+        const defaultValues = {tipo:0}
+        UserAPI.insert({...values, ...defaultValues}).then(result => {
+            this.setState({informationSuccess:true})
+        });
+      }
+    });
   }
 
-
   render() {
+
+    const {informationSuccess, errorMessage} = this.state;
     
     return (
       <Container fluid className="main-content-container px-4">
@@ -39,7 +53,14 @@ class Register extends Component {
         {/* Default Light Table */}
         <Row className="justify-content-center">
         <Col lg="8" md="8" xs="8">
-            <Card small className="mb-4">
+          {informationSuccess && (
+            
+            <div className="justify-content-center" >
+                <Alert className="mb-4" theme="success">Usuário cadastrado com sucesso! </Alert>
+                <Link className="align-items-center" to="/login"><Button pill>&larr; Fazer Login</Button></Link>
+            </div>
+            )}
+            {!informationSuccess && ( <Card small className="mb-4">
               <CardHeader className="border-bottom">
                 <h6 className="m-0"><i style={{color:"#007BFF"}} className="fas fa-exclamation-triangle"></i> Preencha os campos abaixo. Campos Obrigatórios(*)</h6>
               </CardHeader>
@@ -94,6 +115,7 @@ class Register extends Component {
                           </Field>
                         </Col>
                         <Col lg="12"className="p-3" md="12">
+                        {errorMessage && (<span className="d-flex required" style={{paddingBottom:"10px"}}>Já existe esse email cadastrado no Banco de Dados!</span>)}
                           <button type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}} disabled={submitting || pristine}>
                             Salvar
                           </button>
@@ -109,7 +131,7 @@ class Register extends Component {
                   )
                 }} />
               </CardBody>
-            </Card>
+            </Card>)}
           </Col>
           <div style={{position:"fixed",bottom:0,width: "100%"}}>
             <MainFooter/>

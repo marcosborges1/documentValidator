@@ -16,29 +16,41 @@ class Users extends Component {
 
   async componentDidMount() {
     
-    
     const result = await UserAPI.isAutenticate()
     
     if(result.status==200)  {
       // console.log(result.data[0].codigoUsuario)
-      if(result.data[0].codigoUsuario==1) {
+      const user = await UserAPI.get(result.data[0].codigoUsuario);
+      console.log(user);
+      if(user[0].tipo==1) {
         UserAPI.listAll().then(data=> this.setState({data}))
-      } else {
+      }
+      else {
         this.props.history.push("/errors")
       }
     }
     else {
       this.props.history.push("/login")
     }
+
+      
   }
   removeUser = (user,e) => {
 
     e.preventDefault();
     
-    UserAPI.remove(user).then(data=> console.log(data))
-    this.setState(
-      {data:this.state.data.filter(res=>res.codigoUsuario!=user.codigoUsuario)}
-    )
+    const {notification, history} = this.props
+
+    const resultConfirm = window.confirm("Quer realmente exluir o usuario");
+    if(resultConfirm) {
+      UserAPI.remove(user).then(data=> {
+        notification.success('Usuário exluído com sucesso!', null, 2000);
+        history.push("/usuarios");
+      })
+      this.setState(
+        {data:this.state.data.filter(res=>res.codigoUsuario!=user.codigoUsuario)}
+      )
+    }
 	}
   render() {
 
@@ -78,6 +90,9 @@ class Users extends Component {
                       <th scope="col" className="border-0">
                         Email
                       </th>
+                      <th scope="col" className="border-0">
+                        Usuário
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -87,11 +102,12 @@ class Users extends Component {
                           <td className="align-items-center">
                             <Link to={`usuarios/editar/${user.codigoUsuario}`} title="Editar Usuário" className="col-1"><i className="fas fa-edit"></i>
                             </Link>
-                            {user.codigoUsuario!=1 && (<a href="javascript:void(0);" onClick={(e)=>this.removeUser(user,e)} title="Excluir Usuário" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>)}
+                            {user.tipo!=1 && (<a href="javascript:void(0);" onClick={(e)=>this.removeUser(user,e)} title="Excluir Usuário" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>)}
                           </td>
                           <td>{user.nome}</td>
                           <td>{user.identificacao}</td>
                           <td>{user.email}</td>
+                          <td>{user.tipo==1 && (<b>Administrador</b>)}{user.tipo==0 && (<b>Normal</b>)}</td>
                         </tr>
                       )
                     )}

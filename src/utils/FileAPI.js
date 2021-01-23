@@ -41,12 +41,26 @@ export const insert = (body) =>
     body: JSON.stringify(body)
   }).then(res => res.json())
 
-export const remove = (data) =>
-  fetch(`${api}/excluir${modulus}/${data.codigoArquivo}`, { 
-        method: 'DELETE'
-        // headers 
-    })
-    .then(res => res.json())
+export const remove = (data) =>  {
+  const options = {
+    url: `${api}/excluir${modulus}/${data.codigoArquivo}`,
+    timeout: 3000,
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  };
+  return axios(options)
+  .then(response => {
+    return response;
+  });
+}
+  // fetch(`${api}/excluir${modulus}/${data.codigoArquivo}`, { 
+  //       method: 'DELETE'
+  //       // headers 
+  //   })
+  //   .then(res => res.json())
 export const get = (codigoArquivo) => 
     fetch(`${api}/obter${modulus}/${codigoArquivo}`, { 
             method: 'GET'

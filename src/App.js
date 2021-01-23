@@ -1,4 +1,7 @@
 import React from "react";
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import routes from "./routes";
 import withTracker from "./withTracker";
@@ -15,16 +18,18 @@ export default () => (
             key={index}
             path={route.path}
             exact={route.exact}
+            
             component={withTracker(props => {
               return (
                 <route.layout {...props}>
-                  <route.component {...props} />
+                  <route.component notification={NotificationManager} {...props} />
                 </route.layout>
               );
             })}
           />
         );
       })}
+      <NotificationContainer/>
     </div>
   </Router>
 );
