@@ -48,7 +48,7 @@ class FileInsert extends Component {
       formData.append('arquivoAtual',this.state.arquivoAtual); 
       // console.log(this.state.arquivoAtual)
       // console.log(this.state.arquivo)
-      axios.put(`http://ec2-3-94-190-164.compute-1.amazonaws.com:4000/${codigoArquivo}`,formData,config)
+      axios.put(`http://ec2-3-94-190-164.compute-1.amazonaws.com:4000/atualizarArquivo/${codigoArquivo}`,formData,config)
         .then((response) => {
           notification.success('Arquivo atualizado com sucesso!', null, 2000);
           history.push("/arquivos");
