@@ -24,6 +24,8 @@ class FilesValidator extends Component {
     const verifyFile = await FileAPI.isFileOnDB(values);
     if(verifyFile.length>0) {
       let defaultValues;
+      console.log(verifyFile[0].cripto)
+      console.log(values.codigo)
       if(verifyFile[0].cripto == values.codigo) { 
         defaultValues = {validacao: "positivo"} 
         await FileAPI.validateFile({...values,...defaultValues}).then(resultValidation=> {
