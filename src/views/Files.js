@@ -5,7 +5,7 @@ import * as FileAPI from "../utils/FileAPI"
 import * as UserAPI from "../utils/UserAPI"
 import PageTitle from "../components/common/PageTitle";
 import "../assets/mycss.css";
-
+import config from "../config"
 
 class Files extends Component {
     
@@ -55,6 +55,8 @@ class Files extends Component {
   render() {
 
     const {data, loading} = this.state;
+    
+    const server = "http://localhost:4000/"
     
     return (
       <Container fluid className="main-content-container px-4" id="main_">
@@ -109,7 +111,7 @@ class Files extends Component {
                           <td><a className="link_normal" href={file.url} title={file.nome}>{file.arquivo}</a></td>
                           {/* <td><input type="text" value={`${file.cripto}`} onFocus={(e)=>e.target.select()} size="10"/></td> */}
                           <td><textarea onFocus={(e)=>e.target.select()}>{`${file.cripto}`}</textarea></td>
-                          <td><i style={{color:"green", fontSize:"14px"}} className="far fa-thumbs-up">({file.positivo})</i>&nbsp;&nbsp;<i style={{color:"red", fontSize:"14px"}} className="far fa-thumbs-down">({file.negativo})</i>&nbsp;&nbsp;&nbsp;<a style={{fontSize:"14px"}} href={`http://ec2-3-94-190-164.compute-1.amazonaws.com:4000/log/${file.arquivo}`}><i class="fas fa-file-alt"></i></a></td>
+                          <td><i style={{color:"green", fontSize:"14px"}} className="far fa-thumbs-up">({file.positivo})</i>&nbsp;&nbsp;<i style={{color:"red", fontSize:"14px"}} className="far fa-thumbs-down">({file.negativo})</i>&nbsp;&nbsp;&nbsp;<a style={{fontSize:"14px"}} href={`${config.SERVER_URL}/log/${file.arquivo}`}><i class="fas fa-file-alt"></i></a></td>
                         </tr>
                       )
                     )}

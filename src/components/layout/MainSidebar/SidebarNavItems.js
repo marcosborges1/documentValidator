@@ -26,7 +26,7 @@ class SidebarNavItems extends React.Component {
 
     const result = await UserAPI.isAutenticate()
     if(result.status==200)  {
-      if(result.data[0].codigoUsuario==1) {
+      if(result.data[0].tipo==1) {
         this.setState({navItems:[{
           title: "Usuários",
           to: "/usuarios",

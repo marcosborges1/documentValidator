@@ -20,6 +20,7 @@ class Login extends Component {
     isLoged:false
   }
   async componentDidMount() {
+
     await UserAPI.isAutenticate().then(result => {
       
       if(result.status==200) {

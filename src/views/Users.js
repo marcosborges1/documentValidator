@@ -15,7 +15,7 @@ class Users extends Component {
   }
 
   async componentDidMount() {
-    
+     
     const result = await UserAPI.isAutenticate()
     
     if(result.status==200)  {

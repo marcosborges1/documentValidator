@@ -1,4 +1,7 @@
-const api = process.env.FILE_API_URL || 'http://ec2-3-94-190-164.compute-1.amazonaws.com:4000'
+import config from "../config"
+
+const api = config.SERVER_URL
+
 const modulus = "Arquivo"
 const axios = require("axios")
 
