@@ -15,7 +15,7 @@ class Register extends Component {
   state = {
     dataUsers: {
       nome: "",
-      identificacao: "",
+      apelido: "",
       email: "",
       senha: ""
     },
@@ -84,11 +84,11 @@ class Register extends Component {
                               </FormGroup>
                             )}
                           </Field>
-                          <Field name="identificacao" validate={Validator.composeValidators(Validator.required, Validator.minCharNormal)}>
+                          <Field name="apelido" validate={Validator.composeValidators(Validator.required, Validator.minCharNormal)}>
                             {({ input, meta }) => (
                               <FormGroup>
-                                <label htmlFor="#identificacao">Identificação*</label>
-                                <FormInput {...input} id="#identificacao" placeholder="Digite sua identificação" />     
+                                <label htmlFor="#apelido">Apelido*</label>
+                                <FormInput {...input} id="#apelido" placeholder="Digite seu apelido" />     
                                 {meta.error && meta.touched && <span className="required">{meta.error}</span>}
                               </FormGroup>
                             )}
@@ -146,7 +146,7 @@ const initalValidate = (values) => {
 
 	const errors = {};
 	if (!values.nome) {errors.nome = "Campo Obrigatório";}
-	if (!values.identificacao) {errors.identificacao = "Campo Obrigatório";}
+	if (!values.apelido) {errors.apelido = "Campo Obrigatório";}
 	if (!values.email) {errors.email = "Campo Obrigatório";}
 	if (!values.senha) {errors.senha = "Campo Obrigatório";}
 	return errors;
