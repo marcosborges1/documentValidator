@@ -1,11 +1,9 @@
 import React, {Component} from "react";
 import 'react-notifications/lib/notifications.css';
 import { Container, Row, Col, Card, CardHeader, FormGroup, FormInput, CardBody } from "shards-react";
-import { Form, Field,FieldProps  } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
 import * as FileAPI from "../utils/FileAPI"
 import * as UserAPI from "../utils/UserAPI"
-import * as Validator from "../utils/Validator"
 import "../assets/mycss.css";
 
 const path = require('path');
@@ -140,5 +138,4 @@ class FileInsert extends Component {
     )
   }
 }
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 export default FileInsert;

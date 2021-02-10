@@ -40,7 +40,7 @@ class Login extends Component {
     if(result.data["auth"])  {
       localStorage.token = result.data["token"];
       notification.success('Login realizado com sucesso!', null, 2000);
-      history.push('/arquivos')
+      history.push('/inicio')
     }
     else {
         this.setState({errorMessage:true})
@@ -121,7 +121,7 @@ class Login extends Component {
             </Card>
           </Col>
           <div className="d-none d-xs-block d-xl-block d-md-block d-lg-block" style={{position:"fixed",bottom:0,width: "100%"}}>
-            <MainFooter/>
+          <MainFooter menuItems={[{title: `Home`,to: `/`}]} />
           </div>
         </Row>
         

@@ -22,6 +22,7 @@ import Logout from "./views/Logout"
 import FilesValidator from "./views/FilesValidator"
 import Register from "./views/Register";
 import Index from "./views/Index";
+import Home from "./views/Home";
 
 export default [
   {
@@ -31,8 +32,8 @@ export default [
   },
   {
     path: "/errors",
-    layout: DefaultLayout,
-    component: Errors
+    exact: true,
+    layout: Errors
   },
   {
     path: "/usuarios",
@@ -89,6 +90,12 @@ export default [
     path: "/cadastrar-se",
     exact: true,
     layout: Register
+  },
+  {
+    path: "/inicio",
+    exact: true,
+    layout: DefaultLayout,
+    component: Home
   },
 
 

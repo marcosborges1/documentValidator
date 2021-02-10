@@ -36,7 +36,7 @@ class Files extends Component {
       this.setState({data:dados, loading:false});
     }
     else {
-      this.props.history.push("/login");
+      this.props.history.push("/errors");
     }
   }
 

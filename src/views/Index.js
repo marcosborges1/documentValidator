@@ -13,7 +13,7 @@ const Index = () => {
 
         <Row className="justify-content-center">
           {/* Editor */}
-          <Col lg="2" md="2" xs="2" >
+          <Col lg="2" md="2" xs="2">
             <Card small className="mb-4 d-flex align-items-center" style={{marginTop:"60px", paddingBottom:"5px"}}>
               <CardBody className="p-0">
                 <i style={{fontSize:"130px", color: "#61d889"}} className="far fa-check-square"></i>
@@ -21,7 +21,7 @@ const Index = () => {
               <Link to="/validacao"><Button pill>&larr; Validação</Button></Link>
             </Card>
           </Col>
-          <Col lg="2" md="2" xs="2" >
+          <Col lg="2" md="2" xs="2">
             <Card small className="mb-4 d-flex align-items-center" style={{marginTop:"60px", paddingBottom:"5px"}}>
               <CardBody className="p-0">
                 <i style={{fontSize:"120px", paddingTop:"5px",paddingBottom:"5px", color: "#51b4d6"}} className="fas fa-unlock"></i>

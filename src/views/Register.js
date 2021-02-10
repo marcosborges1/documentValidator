@@ -134,10 +134,9 @@ class Register extends Component {
             </Card>)}
           </Col>
           <div className="d-none d-xs-block d-xl-block d-md-block d-lg-block" style={{position:"fixed",bottom:0,width: "100%"}}>
-            <MainFooter/>
+            <MainFooter menuItems={[{title: `Home`,to: `/`}]} />
           </div>
         </Row>
-       
       </Container>
     )
   }

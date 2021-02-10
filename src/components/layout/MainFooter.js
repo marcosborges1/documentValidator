@@ -43,7 +43,7 @@ MainFooter.defaultProps = {
   menuItems: [
     {
       title: "Início",
-      to: "/"
+      to: "/inicio"
     }
   ]
 };

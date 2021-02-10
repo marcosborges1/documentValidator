@@ -18,7 +18,6 @@ export default () => (
             key={index}
             path={route.path}
             exact={route.exact}
-            
             component={withTracker(props => {
               return (
                 <route.layout notification={NotificationManager} {...props}>

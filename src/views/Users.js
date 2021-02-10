@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import { render } from "react-dom";
 import { Container, Alert, Row, Col, Card, CardHeader, CardBody } from "shards-react";
 import * as UserAPI from "../utils/UserAPI"
 import {Link} from 'react-router-dom'
-// import { connect } from 'react-redux' 
 
 
 import PageTitle from "../components/common/PageTitle";
@@ -30,7 +28,7 @@ class Users extends Component {
       }
     }
     else {
-      this.props.history.push("/login")
+      this.props.history.push("/errors")
     }
 
       
