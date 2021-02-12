@@ -26,13 +26,14 @@ class SidebarNavItems extends React.Component {
 
     const result = await UserAPI.isAutenticate()
     if(result.status==200)  {
-      if(result.data[0].tipo==1) {
-        this.setState({navItems:[{
+      const user = await UserAPI.get(result.data[0].codigoUsuario);
+      if(user[0].tipo==1) {
+        this.setState({navItems:[...Store.getSidebarItems(), {
           title: "Usuários",
           to: "/usuarios",
           htmlBefore: '<i class="fas fa-file-alt"></i>',
           htmlAfter: ""
-        },...Store.getSidebarItems()]});
+        }]});
       }
       else {
         this.setState({navItems:Store.getSidebarItems()})

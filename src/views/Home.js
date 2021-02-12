@@ -7,7 +7,7 @@ class Home extends Component {
   async componentWillMount() {
 
     await UserAPI.isAutenticate().then(result => {
-      if(result.status==401) {
+      if(result.status===401) {
          this.props.history.push("/errors")
       }
     }).catch(error=>console.error(error));

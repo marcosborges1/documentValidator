@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import * as UserAPI from "../utils/UserAPI"
 
 const  Logout = (props) => {

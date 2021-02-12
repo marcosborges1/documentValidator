@@ -23,7 +23,7 @@ class Login extends Component {
 
     await UserAPI.isAutenticate().then(result => {
       
-      if(result.status==200) {
+      if(result.status===200) {
         this.setState({isLoged:true})
       }
       else {
@@ -121,7 +121,7 @@ class Login extends Component {
             </Card>
           </Col>
           <div className="d-none d-xs-block d-xl-block d-md-block d-lg-block" style={{position:"fixed",bottom:0,width: "100%"}}>
-          <MainFooter menuItems={[{title: `Home`,to: `/`}]} />
+            <MainFooter menuItems={[{title: `Home`,to: `/`}]} />
           </div>
         </Row>
         

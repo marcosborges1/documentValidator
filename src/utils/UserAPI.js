@@ -32,10 +32,16 @@ export const remove = (data) =>
     })
     .then(res => res.json())
 export const get = (codigoUsuario) => 
-    fetch(`${api}/obter${modulus}/${codigoUsuario}`, { 
-            method: 'GET'
-        })
-    .then(res => res.json())
+  fetch(`${api}/obter${modulus}/${codigoUsuario}`, { 
+          method: 'GET'
+      })
+  .then(res => res.json())
+
+  export const getWithPhones = (codigoUsuario) => 
+  fetch(`${api}/obter${modulus}ComTelefones/${codigoUsuario}`, { 
+          method: 'GET'
+      })
+  .then(res => res.json())
 
 export const login = (body) => {
     const options = {

@@ -18,9 +18,9 @@ class Files extends Component {
 
     const result = await UserAPI.isAutenticate()
     
-    if(result.status==200) {
+    if(result.status===200) {
       let PromiseUser;
-      if(result.data[0].codigoUsuario==1) {
+      if(result.data[0].codigoUsuario===1) {
         PromiseUser = FileAPI.listAll();
       } else {
         PromiseUser = FileAPI.listByUser(result.data[0].codigoUsuario)
@@ -48,7 +48,7 @@ class Files extends Component {
       notification.success('Arquivo deletado com sucesso!', null, 2000);
     })
     this.setState(
-      {data:this.state.data.filter(res=>res.codigoArquivo!=file.codigoArquivo)}
+      {data:this.state.data.filter(res=>res.codigoArquivo!==file.codigoArquivo)}
     )
 	}
 

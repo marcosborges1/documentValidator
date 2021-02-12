@@ -5,8 +5,8 @@ import PageTitle from "../components/common/PageTitle";
 import * as FileAPI from "../utils/FileAPI"
 import * as UserAPI from "../utils/UserAPI"
 import "../assets/mycss.css";
+import config from "../config"
 
-const path = require('path');
 const axios = require("axios");
 
 class FileInsert extends Component {
@@ -26,7 +26,7 @@ class FileInsert extends Component {
     const {history, notification} = this.props
     const {codigoArquivo} = this.props.match.params;
     const formData = new FormData();
-    const config = {timeout: 6000,headers: {'content-type': 'multipart/form-data'}};
+    const configType = {timeout: 6000,headers: {'content-type': 'multipart/form-data'}};
 
     formData.append('nome',this.state.nome);
     formData.append('arquivo',this.state.arquivo);
@@ -34,7 +34,7 @@ class FileInsert extends Component {
 
     if(!codigoArquivo) {
 
-      await axios.post("http://ec2-3-94-190-164.compute-1.amazonaws.com:4000/inserirArquivo",formData,config)
+      await axios.post(`${config.SERVER_URL}/inserirArquivo`,formData,configType)
         .then((response) => {
             console.log("Arquivo feito upload com sucesso!");
             notification.success('Arquivo inserido com sucesso!', null, 2000);
@@ -46,7 +46,7 @@ class FileInsert extends Component {
       formData.append('arquivoAtual',this.state.arquivoAtual); 
       // console.log(this.state.arquivoAtual)
       // console.log(this.state.arquivo)
-      axios.put(`http://ec2-3-94-190-164.compute-1.amazonaws.com:4000/atualizarArquivo/${codigoArquivo}`,formData,config)
+      axios.put(`${config.SERVER_URL}/atualizarArquivo/${codigoArquivo}`,formData,configType)
         .then((response) => {
           notification.success('Arquivo atualizado com sucesso!', null, 2000);
           history.push("/arquivos");

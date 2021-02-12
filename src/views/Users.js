@@ -16,11 +16,11 @@ class Users extends Component {
      
     const result = await UserAPI.isAutenticate()
     
-    if(result.status==200)  {
+    if(result.status===200)  {
       // console.log(result.data[0].codigoUsuario)
       const user = await UserAPI.get(result.data[0].codigoUsuario);
       console.log(user);
-      if(user[0].tipo==1) {
+      if(user[0].tipo===1) {
         UserAPI.listAll().then(data=> this.setState({data}))
       }
       else {

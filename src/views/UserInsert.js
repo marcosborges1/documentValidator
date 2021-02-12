@@ -1,10 +1,14 @@
 import React, {Component} from "react";
 // import { Container, Row, Col, Card, CardHeader, CardBody,Form, FormInput, FormGroup, Button } from "shards-react";
-import { Container, Row, Col, Card, CardHeader, FormGroup, FormInput, FormSelect, CardBody } from "shards-react";
+import { Container, Row, Col, Button, Card, CardHeader, FormGroup, FormInput, FormSelect, CardBody } from "shards-react";
 import { Form, Field } from 'react-final-form'
 import PageTitle from "../components/common/PageTitle";
 import * as UserAPI from "../utils/UserAPI"
+import * as PhoneAPI from "../utils/PhoneAPI"
 import * as Validator from "../utils/Validator"
+import arrayMutators from 'final-form-arrays'
+import { FieldArray } from 'react-final-form-arrays'
+import InputMask from "react-input-mask";
 
 import "../assets/mycss.css";
 
@@ -13,10 +17,11 @@ class UserInsert extends Component {
   state = {
     dataUsers: {
       nome: "",
-      identificacao: "",
+      apelido: "",
       email: "",
       senha: "",
       tipo: 0,
+      telefones: [ { numero: "" }]
     }
     ,autorizacaoTipo:false
   }
@@ -36,7 +41,7 @@ class UserInsert extends Component {
       UserAPI.update(codigoUsuario, values)
       notification.success('Usuário alterado com sucesso!', null, 2000);
     }
-    if(user[0].tipo==1) {
+    if(user[0].tipo===1) {
       history.push('/usuarios')
     } else {
       history.push('/arquivos')
@@ -47,14 +52,16 @@ class UserInsert extends Component {
 
     const {codigoUsuario} = this.props.match.params;
     const result = await UserAPI.isAutenticate();
-    if(result.status==200) { 
+    if(result.status===200) { 
       const user = await UserAPI.get(result.data[0].codigoUsuario)
       
-      if(codigoUsuario === result.data[0].codigoUsuario || user[0].tipo==1) {
+      if(codigoUsuario === result.data[0].codigoUsuario || user[0].tipo===1) {
         
-        this.setState({autorizacaoTipo:user[0].tipo==1?true:false});
-        UserAPI.get(codigoUsuario).then(res=>{
+        this.setState({autorizacaoTipo:user[0].tipo===1?true:false});
+        UserAPI.get(codigoUsuario).then( async res=>{
 
+          await PhoneAPI.listByUser(codigoUsuario).then(resPhones=>res[0]["telefones"] = resPhones);
+          console.log(res);
           if(typeof res !== 'undefined' && res.length > 0) {
             console.log("Tem conteudo")
             this.setState({dataUsers:res[0]})
@@ -93,6 +100,9 @@ class UserInsert extends Component {
               <Form 
                 onSubmit={this.onSubmit} 
                 validate={initalValidate}
+                mutators={{
+                  ...arrayMutators
+                }}
                 initialValues={this.state.dataUsers} 
                 render={({ handleSubmit, pristine, reset, submitting, values }) => {
                   return (
@@ -108,11 +118,11 @@ class UserInsert extends Component {
                               </FormGroup>
                             )}
                           </Field>
-                          <Field name="identificacao" validate={Validator.composeValidators(Validator.required, Validator.minCharNormal)}>
+                          <Field name="apelido" validate={Validator.composeValidators(Validator.required, Validator.minCharNormal)}>
                             {({ input, meta }) => (
                               <FormGroup>
-                                <label htmlFor="#identificacao">Identificação*</label>
-                                <FormInput {...input} id="#identificacao" placeholder="Digite sua identificação" />     
+                                <label htmlFor="#apelido">Apelido*</label>
+                                <FormInput {...input} id="#apelido" placeholder="Digite sua identificação" />     
                                 {meta.error && meta.touched && <span className="required">{meta.error}</span>}
                               </FormGroup>
                             )}
@@ -149,6 +159,56 @@ class UserInsert extends Component {
                               </FormGroup>
                             )}
                           </Field>
+
+                          <FieldArray name="telefones" validate={Validator.requiredArray}>
+                            
+                            {({ fields}) => { 
+                              return (
+                                <div style={{position:"relative"}}>
+                                    {fields.map((name, index) => (
+                                      <div key={name} className="row" >
+                                        <Col lg="9" md="9" xs="9">
+                                          <Field name={`${name}.numero`} 
+                                              validate={Validator.composeValidators(Validator.required, Validator.mustBeNumberPhone)} 
+                                              parse={value =>
+                                              value
+                                                .replace(/\)/g, "")
+                                                .replace(/\(/g, "")
+                                                .replace(/-/g, "")
+                                                .replace(/ /g, "")
+                                            }>
+                                            {({ input, meta }) => (
+                                              <FormGroup>
+                                                <label htmlFor={`#telefone${index}`} >Telefone {index+1}</label>
+                                                {/* <FormInput {...input} id={`telefone${index}`} placeholder={"(99) 99999-9999"} />      */}
+                                                <InputMask
+                                                  disabled={false}
+                                                  mask="(99) 99999-9999"
+                                                  {...input}
+                                                >
+                                                  {InputProps => <FormInput disabled={false} {...InputProps} />}
+                                                </InputMask>
+                                                {meta.error && meta.touched && <span className="required">{meta.error}</span>}
+                                              </FormGroup>
+                                            )}
+                                          </Field>
+                                        </Col>
+                                        <div style={{marginTop:"35px"}}>
+                                          <Button style={{fontSize:"10px", padding:"4px", marginRight:"8px"}}
+                                            onClick={() => fields.push({ numero: ''})}>
+                                            <i class="fas fa-plus"></i>
+                                          </Button>
+                                          {index>0 && (<Button style={{fontSize:"10px", padding:"4px", background:"red", border:"1px solid red"}}
+                                            onClick={() => fields.remove(index)}>
+                                            <i className="fas fa-minus-circle"></i>
+                                          </Button>)}
+                                        </div>
+                                      </div>
+                                    ))}
+                              </div>
+                            )}}
+                        </FieldArray>
+
                         </Col>
                         <Col lg="12"className="p-3" md="12">
                           <button type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}} disabled={submitting || pristine}>
@@ -178,7 +238,7 @@ const initalValidate = (values) => {
 
 	const errors = {};
 	if (!values.nome) {errors.nome = "Campo Obrigatório";}
-	if (!values.identificacao) {errors.identificacao = "Campo Obrigatório";}
+	if (!values.apelido) {errors.apelido = "Campo Obrigatório";}
 	if (!values.email) {errors.email = "Campo Obrigatório";}
 	if (!values.senha) {errors.senha = "Campo Obrigatório";}
 	return errors;

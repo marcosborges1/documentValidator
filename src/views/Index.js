@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import { Container,Row, Col, Card, Button, CardBody } from "shards-react";
 import {Link} from 'react-router-dom'
 import PageTitle from "../components/common/PageTitle";
