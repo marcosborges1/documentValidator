@@ -206,7 +206,7 @@ class UserInsert extends Component {
                                                   mask="(99) 99999-9999"
                                                   {...input}
                                                 >
-                                                  {InputProps => <FormInput disabled={false} {...InputProps} />}
+                                                  {InputProps => <FormInput placeholder={"(99) 99999-9999"} disabled={false} {...InputProps} />}
                                                 </InputMask>
                                                 {meta.error && meta.touched && <span className="required">{meta.error}</span>}
                                               </FormGroup>

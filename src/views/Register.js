@@ -150,7 +150,7 @@ class Register extends Component {
                                                   mask="(99) 99999-9999"
                                                   {...input}
                                                 >
-                                                  {InputProps => <FormInput disabled={false} {...InputProps} />}
+                                                  {InputProps => <FormInput placeholder={"(99) 99999-9999"} disabled={false} {...InputProps} />}
                                                 </InputMask>
                                                 {meta.error && meta.touched && <span className="required">{meta.error}</span>}
                                               </FormGroup>
@@ -174,8 +174,8 @@ class Register extends Component {
                         </FieldArray>
                         </Col>
                         <Col lg="12"className="p-3" md="12">
-                        {JSON.stringify(values, 0, 2)}
-                        <pre>errors{JSON.stringify(errors, 0, 2)}</pre> 
+                        {/* {JSON.stringify(values, 0, 2)}
+                        <pre>errors{JSON.stringify(errors, 0, 2)}</pre>  */}
                         {errorMessage && (<span className="d-flex required" style={{paddingBottom:"10px"}}>Já existe esse email cadastrado no Banco de Dados!</span>)}
                           <button type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}} disabled={submitting || pristine}>
                             Salvar

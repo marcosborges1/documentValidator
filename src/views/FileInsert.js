@@ -6,7 +6,6 @@ import * as FileAPI from "../utils/FileAPI"
 import * as UserAPI from "../utils/UserAPI"
 import "../assets/mycss.css";
 import config from "../config"
-import * as Validator from "../utils/Validator"
 
 const axios = require("axios");
 
@@ -44,13 +43,22 @@ class FileInsert extends Component {
       formData.append('arquivo',this.state.arquivo);
 
       if(!codigoArquivo) {
-
-        await axios.post(`${config.SERVER_URL}/inserirArquivo`,formData,configType)
-          .then((response) => {
-              console.log("Arquivo feito upload com sucesso!");
-              notification.success('Arquivo inserido com sucesso!', null, 2000);
-              history.push("/arquivos");
-          }).catch((error) => {});
+        
+        const verifyFile = await FileAPI.isFileOnDB({arquivo:this.state.arquivo.name});
+        if(verifyFile.length>0) {
+          document.getElementById("erro_existe_arquivo").innerHTML = "Já existe um arquivo com o mesmo nome no Banco de Dados<br/><b>Por favor renomeie o arquivo!</b>"
+          document.getElementById("enviar_arquivo").disabled=false;
+          document.getElementById("enviar_arquivo").innerHTML="Salvar";
+          return 
+        }
+        else {
+          await axios.post(`${config.SERVER_URL}/inserirArquivo`,formData,configType)
+            .then((response) => {
+                console.log("Arquivo feito upload com sucesso!");
+                notification.success('Arquivo inserido com sucesso!', null, 2000);
+                history.push("/arquivos");
+            }).catch((error) => {});
+        }
       }
       else {
         
@@ -70,6 +78,7 @@ class FileInsert extends Component {
     let pass = true;
     document.getElementById("erro_nome").innerHTML="";
     document.getElementById("erro_arquivo").innerHTML="";
+    document.getElementById("erro_existe_arquivo").innerHTML = "";
     
     if(this.state.nome == "") {
       document.getElementById("erro_nome").innerHTML="Preencha o campo nome";
@@ -93,12 +102,8 @@ class FileInsert extends Component {
 
         if(typeof res !== 'undefined' && res.length > 0) {
           console.log("Tem conteudo")
-          // res[0].arquivo = "";
-          // console.log(res[0])
           const {nome, arquivo, codigoArquivo,codigoUsuario} = res[0];
           this.setState({nome, arquivo, arquivoAtual:arquivo, codigoArquivo,codigoUsuario,showArquivo:true})
-
-          // this.setState({dataFiles:res[0]})
         } else {
           console.log("Não")
         }
@@ -147,6 +152,7 @@ class FileInsert extends Component {
                         {!showArquivo && (<input type="file" accept="application/pdf,image/png, image/jpeg" name="arquivo" onChange={(e)=>this.setState({arquivo : e.target.files[0]})} />)}
                         <br/>
                         <span id="erro_arquivo" className="required"></span>
+                        <span id="erro_existe_arquivo" className="required"></span>
                       </FormGroup>
                     </Col>
                     <Col lg="12"className="p-3" md="12">
