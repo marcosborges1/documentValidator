@@ -22,8 +22,9 @@ class UserInsert extends Component {
       senha: "",
       tipo: 0,
       telefones: [ { numero: "" }]
-    }
-    ,autorizacaoTipo:false
+    },
+    errorMessage:false,
+    autorizacaoTipo:false
   }
 
   onSubmit = async (values) => {
@@ -34,14 +35,32 @@ class UserInsert extends Component {
     const {notification, history} = this.props;
 
     if(!codigoUsuario) {
-      UserAPI.insert(values);
-      notification.success('Usuário cadastrado com sucesso!', null, 2000);
+      // UserAPI.insert(values);
+      // notification.success('Usuário cadastrado com sucesso!', null, 2000);
+      await UserAPI.verifyEmail({email:values.email}).then(async (result)=> {
+        if(result.data.exist) {
+          this.setState({errorMessage:true});
+        }
+        else {
+          this.setState({errorMessage:false});
+          await UserAPI.insert({...values}).then(async(result) => {
+              await PhoneAPI.insert({...values, ...{codigoUsuario: result.codigoUsuario}}).then(res=> {
+                notification.success('Usuário cadastrado com sucesso!', null, 2000);
+              });
+          });
+        }
+      });
     }
     else {
-      UserAPI.update(codigoUsuario, values)
-      notification.success('Usuário alterado com sucesso!', null, 2000);
+      // console.log(values);
+      UserAPI.update(codigoUsuario, values).then(async (result)=> {
+        await PhoneAPI.remove(codigoUsuario);
+        await PhoneAPI.insert(values);
+        notification.success(result.message, null, 2000);
+      })
+      
     }
-    if(user[0].tipo===1) {
+    if(user[0].tipo==1) {
       history.push('/usuarios')
     } else {
       history.push('/arquivos')
@@ -52,12 +71,12 @@ class UserInsert extends Component {
 
     const {codigoUsuario} = this.props.match.params;
     const result = await UserAPI.isAutenticate();
-    if(result.status===200) { 
+    if(result.status==200) { 
+
       const user = await UserAPI.get(result.data[0].codigoUsuario)
-      
-      if(codigoUsuario === result.data[0].codigoUsuario || user[0].tipo===1) {
+      if(codigoUsuario == result.data[0].codigoUsuario || user[0].tipo==1) {
         
-        this.setState({autorizacaoTipo:user[0].tipo===1?true:false});
+        this.setState({autorizacaoTipo:user[0].tipo==1?true:false});
         UserAPI.get(codigoUsuario).then( async res=>{
 
           await PhoneAPI.listByUser(codigoUsuario).then(resPhones=>res[0]["telefones"] = resPhones);
@@ -79,7 +98,7 @@ class UserInsert extends Component {
 
   render() {
     
-    const {autorizacaoTipo} = this.state;
+    const {autorizacaoTipo, errorMessage} = this.state;
 
     return (
       <Container fluid className="main-content-container px-4">
@@ -139,6 +158,7 @@ class UserInsert extends Component {
                               </FormGroup>
                             )}
                           </Field>
+                          {errorMessage && (<span className="d-flex required" style={{paddingBottom:"10px"}}>Já existe esse email cadastrado no Banco de Dados!</span>)}
                         </Col>
                         <Col lg="6" md="6">  
                           <Field name="email" validate={Validator.composeValidators(Validator.required, Validator.minCharNormal, Validator.isEmail)}>
@@ -211,7 +231,8 @@ class UserInsert extends Component {
 
                         </Col>
                         <Col lg="12"className="p-3" md="12">
-                          <button type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}} disabled={submitting || pristine}>
+                        {/* {JSON.stringify(values, 0, 2)} */}
+                          <button type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}} disabled={submitting}>
                             Salvar
                           </button>
                           <button

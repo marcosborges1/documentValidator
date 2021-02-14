@@ -18,11 +18,11 @@ class Register extends Component {
 
   state = {
     dataUsers: {
-      nome: "Marcos",
-      apelido: "teste",
-      email: "teste@gmail.com",
-      senha: "asdfadsfasd",
-      telefones: [ { numero: "86999040506" } ]
+      nome: "",
+      apelido: "",
+      email: "",
+      senha: "",
+      telefones: [ { numero: "" } ]
     },
     informationSuccess:false,
     errorMessage:false

@@ -16,6 +16,9 @@ export const listByUser = (codigoUsuario) =>
 export const insert = (body) =>
   fetch(`${api}/inserir${modulus}`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
     body: body
   })
 
@@ -46,11 +49,10 @@ export const remove = (data) =>  {
 
 export const get = (codigoArquivo) => 
     fetch(`${api}/obter${modulus}/${codigoArquivo}`, { 
-            method: 'GET'
-            // headers 
-        })
+      method: 'GET'
+    })
     .then(res => res.json())
-
+  
 export const isFileOnDB = (body) =>
   fetch(`${api}/verificar${modulus}`, {
     method: 'POST',

@@ -20,7 +20,7 @@ class Users extends Component {
       // console.log(result.data[0].codigoUsuario)
       const user = await UserAPI.get(result.data[0].codigoUsuario);
       console.log(user);
-      if(user[0].tipo===1) {
+      if(user[0].tipo==1) {
         UserAPI.listAll().then(data=> this.setState({data}))
       }
       else {
@@ -83,7 +83,7 @@ class Users extends Component {
                         Nome Completo
                       </th>
                       <th scope="col" className="border-0">
-                        Identificação
+                        Apelido
                       </th>
                       <th scope="col" className="border-0">
                         Email
@@ -103,7 +103,7 @@ class Users extends Component {
                             {user.tipo!=1 && (<a href="javascript:void(0);" onClick={(e)=>this.removeUser(user,e)} title="Excluir Usuário" style={{color:'red' }}><i className="fas fa-trash-alt"></i></a>)}
                           </td>
                           <td>{user.nome}</td>
-                          <td>{user.identificacao}</td>
+                          <td>{user.apelido}</td>
                           <td>{user.email}</td>
                           <td>{user.tipo==1 && (<b>Administrador</b>)}{user.tipo==0 && (<b>Normal</b>)}</td>
                         </tr>

@@ -14,3 +14,8 @@ export const insert = (body) =>
     },
     body: JSON.stringify(body)
   }).then(res => res.json())
+
+export const remove = (codigoUsuario) =>
+  fetch(`${api}/excluir${modulus}sPorUsuario/${codigoUsuario}`, { 
+        method: 'DELETE'
+  }).then(res => res.json())

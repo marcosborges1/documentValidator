@@ -6,6 +6,7 @@ import * as FileAPI from "../utils/FileAPI"
 import * as UserAPI from "../utils/UserAPI"
 import "../assets/mycss.css";
 import config from "../config"
+import * as Validator from "../utils/Validator"
 
 const axios = require("axios");
 
@@ -22,38 +23,64 @@ class FileInsert extends Component {
   onFormSubmit = async (e) => {
     
     e.preventDefault();
+    document.getElementById("enviar_arquivo").disabled=true;
+    document.getElementById("enviar_arquivo").innerHTML="Enviando...";
+    
+    const pass = this.validateInsert();
 
-    const {history, notification} = this.props
-    const {codigoArquivo} = this.props.match.params;
-    const formData = new FormData();
-    const configType = {timeout: 6000,headers: {'content-type': 'multipart/form-data'}};
+    if(!pass) {
+      document.getElementById("enviar_arquivo").disabled=false;
+      document.getElementById("enviar_arquivo").innerHTML="Salvar";
+      return 
+    }
 
-    formData.append('nome',this.state.nome);
-    formData.append('arquivo',this.state.arquivo);
-    formData.append('codigoUsuario',this.state.codigoUsuario);
+      const {history, notification} = this.props
+      const {codigoArquivo} = this.props.match.params;
+      const formData = new FormData();
+      const configType = {timeout: 6000,headers: {'content-type': 'multipart/form-data'}};
 
-    if(!codigoArquivo) {
+      formData.append('nome',this.state.nome);
+      formData.append('codigoUsuario',this.state.codigoUsuario);
+      formData.append('arquivo',this.state.arquivo);
 
-      await axios.post(`${config.SERVER_URL}/inserirArquivo`,formData,configType)
-        .then((response) => {
-            console.log("Arquivo feito upload com sucesso!");
-            notification.success('Arquivo inserido com sucesso!', null, 2000);
+      if(!codigoArquivo) {
+
+        await axios.post(`${config.SERVER_URL}/inserirArquivo`,formData,configType)
+          .then((response) => {
+              console.log("Arquivo feito upload com sucesso!");
+              notification.success('Arquivo inserido com sucesso!', null, 2000);
+              history.push("/arquivos");
+          }).catch((error) => {});
+      }
+      else {
+        
+        formData.append('arquivoAtual',this.state.arquivoAtual); 
+        // console.log(this.state.arquivoAtual)
+        // console.log(this.state.arquivo)
+        axios.put(`${config.SERVER_URL}/atualizarArquivo/${codigoArquivo}`,formData,configType)
+          .then((response) => {
+            notification.success('Arquivo atualizado com sucesso!', null, 2000);
             history.push("/arquivos");
-        }).catch((error) => {});
-    }
-    else {
-      
-      formData.append('arquivoAtual',this.state.arquivoAtual); 
-      // console.log(this.state.arquivoAtual)
-      // console.log(this.state.arquivo)
-      axios.put(`${config.SERVER_URL}/atualizarArquivo/${codigoArquivo}`,formData,configType)
-        .then((response) => {
-          notification.success('Arquivo atualizado com sucesso!', null, 2000);
-          history.push("/arquivos");
-        }).catch((error) => {});
-    }
+          }).catch((error) => {});
+      }
+    
   }
-
+  validateInsert() {
+    
+    let pass = true;
+    document.getElementById("erro_nome").innerHTML="";
+    document.getElementById("erro_arquivo").innerHTML="";
+    
+    if(this.state.nome == "") {
+      document.getElementById("erro_nome").innerHTML="Preencha o campo nome";
+      pass = false; 
+    }
+    if(this.state.arquivo == "") {
+      document.getElementById("erro_arquivo").innerHTML="Faça o upload do arquivo";
+      pass = false;
+    }
+    return pass
+  }
   async componentDidMount() {
 
     await UserAPI.isAutenticate().then(result=>this.setState({codigoUsuario:result.data[0].codigoUsuario}));
@@ -112,15 +139,18 @@ class FileInsert extends Component {
                       <FormGroup>
                         <label htmlFor="#nome">Nome*</label>
                         <input type="text" name="nome" className="form-control" placeholder="Digite o nome do arquivo" value={nome} onChange= {(e)=>this.setState({nome:e.target.value})} />
+                        <span id="erro_nome" className="required"></span>
                       </FormGroup>
                       <FormGroup>
                         <label htmlFor="#arquivo">Arquivo*<i> (Somente: pdf, jpeg e png)</i></label><br/>
                         {showArquivo && (<div><span className="arquivo_selecionado"><i className="fas fa-file"></i> {arquivo}</span><a className="other_choice" onClick={()=>this.setState({showArquivo:false})} href="javascript:void(0)" >Escolher outro arquivo</a></div>)}
                         {!showArquivo && (<input type="file" accept="application/pdf,image/png, image/jpeg" name="arquivo" onChange={(e)=>this.setState({arquivo : e.target.files[0]})} />)}
+                        <br/>
+                        <span id="erro_arquivo" className="required"></span>
                       </FormGroup>
                     </Col>
                     <Col lg="12"className="p-3" md="12">
-                      <button type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}}>
+                      <button id="enviar_arquivo" type="submit" className="btn btn-success" style={{color:"#000", marginRight:"10px"}} >
                         Salvar
                       </button>
                       <button

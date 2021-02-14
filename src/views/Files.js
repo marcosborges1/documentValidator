@@ -12,27 +12,35 @@ class Files extends Component {
   state = {
     data: [],
     loading:true,
+    isAdmin:false
   }
 
   async componentDidMount() {
 
     const result = await UserAPI.isAutenticate()
     
-    if(result.status===200) {
+    if(result.status==200) {
       let PromiseUser;
-      if(result.data[0].codigoUsuario===1) {
+      const userResult = await UserAPI.get(result.data[0].codigoUsuario)
+      if(userResult[0].tipo==1) {
         PromiseUser = FileAPI.listAll();
+        this.setState({isAdmin:true})
       } else {
         PromiseUser = FileAPI.listByUser(result.data[0].codigoUsuario)
       }
       const dados = await PromiseUser.then(data => { 
         data.map( async (d) => {
-          d.positivo = await FileAPI.getValidations({arquivo:`${d.arquivo}`, tipo:'positivo' }).then(res=>{ console.log("as"); return res.data} );  
-          d.negativo = await FileAPI.getValidations({arquivo:`${d.arquivo}`, tipo:'negativo' }).then(res=>{ console.log("as"); return res.data} );  
+          // d.positivo = await FileAPI.getValidations({arquivo:`${d.arquivo}`, tipo:'positivo' }).then(res=>{ return res.data} );  
+          d.resultados = await FileAPI.getValidations({arquivo:`${d.arquivo}`, tipo:'nedgativo' }).then(res=>{ return res.data} );  
+          if(userResult[0].tipo==1) {
+            d.usuario = await UserAPI.get(d.codigoUsuario).then(res=>{ 
+              return res[0]
+            });
+          }
         })
         return data
       });
-      await sleep(1500)  
+      await sleep(2000)  
       this.setState({data:dados, loading:false});
     }
     else {
@@ -54,10 +62,9 @@ class Files extends Component {
 
   render() {
 
-    const {data, loading} = this.state;
-    
-    const server = "http://localhost:4000/"
-    
+    const {data, loading, isAdmin} = this.state;
+    console.log(data);
+
     return (
       <Container fluid className="main-content-container px-4" id="main_">
         {/* Page Header */}
@@ -93,6 +100,9 @@ class Files extends Component {
                       <th scope="col" className="border-0">
                         Criptografia
                       </th>
+                      {isAdmin && (<th scope="col" className="border-0">
+                        Usuário
+                      </th>)}
                       <th scope="col" className="border-0">
                         Validações
                       </th>
@@ -111,7 +121,8 @@ class Files extends Component {
                           <td><a className="link_normal" href={file.url} title={file.nome}>{file.arquivo}</a></td>
                           {/* <td><input type="text" value={`${file.cripto}`} onFocus={(e)=>e.target.select()} size="10"/></td> */}
                           <td><textarea onFocus={(e)=>e.target.select()}>{`${file.cripto}`}</textarea></td>
-                          <td><i style={{color:"green", fontSize:"14px"}} className="far fa-thumbs-up">({file.positivo})</i>&nbsp;&nbsp;<i style={{color:"red", fontSize:"14px"}} className="far fa-thumbs-down">({file.negativo})</i>&nbsp;&nbsp;&nbsp;<a style={{fontSize:"14px"}} href={`${config.SERVER_URL}/log/${file.arquivo}`}><i class="fas fa-file-alt"></i></a></td>
+                          {isAdmin && (<td>{file.usuario && (file.usuario.nome)}</td>)}
+                          <td><i style={{color:"green", fontSize:"14px"}} className="far fa-thumbs-up">({file.resultados && (file.resultados.countP)})</i>&nbsp;&nbsp;<i style={{color:"red", fontSize:"14px"}} className="far fa-thumbs-down">({file.resultados && (file.resultados.countN)})</i>&nbsp;&nbsp;&nbsp;<a style={{fontSize:"14px"}} href={`${config.SERVER_URL}/log/${file.arquivo}`}><i class="fas fa-file-alt"></i></a></td>
                         </tr>
                       )
                     )}
