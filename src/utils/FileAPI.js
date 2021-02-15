@@ -86,7 +86,7 @@ export const validateFile = (body) => {
 export const getValidations = (body) => {
   const options = {
     url: `${api}/validacoesPor${modulus}`,
-    timeout: 2000,
+    timeout: 6000,
     method: 'POST',
     headers: {
       'Accept': 'application/json',

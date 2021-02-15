@@ -40,7 +40,7 @@ class Files extends Component {
         })
         return data
       });
-      await sleep(2000)  
+      await sleep(3000)  
       this.setState({data:dados, loading:false});
     }
     else {

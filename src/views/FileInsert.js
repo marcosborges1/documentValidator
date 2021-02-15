@@ -36,7 +36,7 @@ class FileInsert extends Component {
       const {history, notification} = this.props
       const {codigoArquivo} = this.props.match.params;
       const formData = new FormData();
-      const configType = {timeout: 6000,headers: {'content-type': 'multipart/form-data'}};
+      const configType = {timeout: 10000,headers: {'content-type': 'multipart/form-data'}};
 
       formData.append('nome',this.state.nome);
       formData.append('codigoUsuario',this.state.codigoUsuario);
