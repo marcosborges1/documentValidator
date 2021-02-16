@@ -52,12 +52,15 @@ class Files extends Component {
 
     const {notification} = this.props;
     e.preventDefault();
-    FileAPI.remove(file).then(data=> {
-      notification.success('Arquivo deletado com sucesso!', null, 2000);
-    })
-    this.setState(
-      {data:this.state.data.filter(res=>res.codigoArquivo!==file.codigoArquivo)}
-    )
+    const resultConfirm = window.confirm("Quer realmente exluir o arquivo?");
+    if(resultConfirm) {
+      FileAPI.remove(file).then(data=> {
+        notification.success('Arquivo deletado com sucesso!', null, 2000);
+      })
+      this.setState(
+        {data:this.state.data.filter(res=>res.codigoArquivo!==file.codigoArquivo)}
+      )
+    }
 	}
 
   render() {
