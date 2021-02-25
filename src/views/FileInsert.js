@@ -149,7 +149,7 @@ class FileInsert extends Component {
                       <FormGroup>
                         <label htmlFor="#arquivo">Arquivo*<i> (Somente: pdf, jpeg e png)</i></label><br/>
                         {showArquivo && (<div><span className="arquivo_selecionado"><i className="fas fa-file"></i> {arquivo}</span><a className="other_choice" onClick={()=>this.setState({showArquivo:false})} href="javascript:void(0)" >Escolher outro arquivo</a></div>)}
-                        {!showArquivo && (<input type="file" accept="application/pdf,image/png, image/jpeg" name="arquivo" onChange={(e)=>this.setState({arquivo : e.target.files[0]})} />)}
+                        {!showArquivo && (<input type="file" accept=".docx, text/plain, application/pdf,image/png, image/jpeg" name="arquivo" onChange={(e)=>this.setState({arquivo : e.target.files[0]})} />)}
                         <br/>
                         <span id="erro_arquivo" className="required"></span>
                         <span id="erro_existe_arquivo" className="required"></span>

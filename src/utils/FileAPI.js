@@ -63,6 +63,16 @@ export const isFileOnDB = (body) =>
     body: JSON.stringify(body)
   }).then(res => res.json())
 
+  export const isFileOnDBToValidation = (body) =>
+  fetch(`${api}/verificar${modulus}ParaValidacao`, {
+    method: 'POST',
+    headers: {
+    //   ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }).then(res => res.json())
+
 export const validateFile = (body) => {
 
   const options = {
