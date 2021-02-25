@@ -7,10 +7,10 @@
   "static/js/1.4d32d542.chunk.js.map": "./static/js/1.4d32d542.chunk.js.map",
   "runtime~main.js": "./static/js/runtime~main.4a686d48.js",
   "runtime~main.js.map": "./static/js/runtime~main.4a686d48.js.map",
-  "static/media/notifications.css": "./static/media/notification.0b4ac1dc.ttf",
+  "static/media/notifications.css": "./static/media/notification.5bee74ca.svg",
   "static/css/main.0b3f0f36.chunk.css.map": "./static/css/main.0b3f0f36.chunk.css.map",
   "static/css/1.3f98c19e.chunk.css.map": "./static/css/1.3f98c19e.chunk.css.map",
   "index.html": "./index.html",
-  "precache-manifest.a764b9e32f938b6f3dc8ea7888f1474a.js": "./precache-manifest.a764b9e32f938b6f3dc8ea7888f1474a.js",
+  "precache-manifest.2b333443a36281e5ca8df7ea036706f0.js": "./precache-manifest.2b333443a36281e5ca8df7ea036706f0.js",
   "service-worker.js": "./service-worker.js"
 }
