@@ -44,27 +44,28 @@ class FileInsert extends Component {
 
       if(!codigoArquivo) {
         
-        const verifyFile = await FileAPI.isFileOnDB({arquivo:this.state.arquivo.name});
-        if(verifyFile.length>0) {
-          document.getElementById("erro_existe_arquivo").innerHTML = "Já existe um arquivo com o mesmo nome no Banco de Dados<br/><b>Por favor renomeie o arquivo!</b>"
-          document.getElementById("enviar_arquivo").disabled=false;
-          document.getElementById("enviar_arquivo").innerHTML="Salvar";
-          return 
-        }
-        else {
-          await axios.post(`${config.SERVER_URL}/inserirArquivo`,formData,configType)
-            .then((response) => {
-                console.log("Arquivo feito upload com sucesso!");
-                notification.success('Arquivo inserido com sucesso!', null, 2000);
-                history.push("/arquivos");
-            }).catch((error) => {});
-        }
+        // const verifyFile = await FileAPI.isFileOnDB({arquivo:this.state.arquivo.name});
+        await axios.post(`${config.SERVER_URL}/verificarArquivoParaValidacao`,formData,configType).then(async (response)=> {
+          
+          if(response.data.length>0) {
+            document.getElementById("erro_existe_arquivo").innerHTML = "Já existe um arquivo com o mesmo conteúdo no Banco de Dados<br/><b>Por escolha o arquivo!</b>"
+            document.getElementById("enviar_arquivo").disabled=false;
+            document.getElementById("enviar_arquivo").innerHTML="Salvar";
+            return 
+          }
+          else {
+            document.getElementById("enviar_arquivo").innerHTML="Aguarde...";
+            await axios.post(`${config.SERVER_URL}/inserirArquivo`,formData,configType)
+              .then((response) => {
+                  console.log("Arquivo feito upload com sucesso!");
+                  notification.success('Arquivo inserido com sucesso!', null, 2000);
+                  history.push("/arquivos");
+              }).catch((error) => {});
+          }
+        })
       }
       else {
-        
         formData.append('arquivoAtual',this.state.arquivoAtual); 
-        // console.log(this.state.arquivoAtual)
-        // console.log(this.state.arquivo)
         axios.put(`${config.SERVER_URL}/atualizarArquivo/${codigoArquivo}`,formData,configType)
           .then((response) => {
             notification.success('Arquivo atualizado com sucesso!', null, 2000);
@@ -147,7 +148,7 @@ class FileInsert extends Component {
                         <span id="erro_nome" className="required"></span>
                       </FormGroup>
                       <FormGroup>
-                        <label htmlFor="#arquivo">Arquivo*<i> (Somente: pdf, jpeg e png)</i></label><br/>
+                        <label htmlFor="#arquivo">Arquivo*<i> (Somente: .docx, .txt, .pdf, .jpeg e .png)</i></label><br/>
                         {showArquivo && (<div><span className="arquivo_selecionado"><i className="fas fa-file"></i> {arquivo}</span><a className="other_choice" onClick={()=>this.setState({showArquivo:false})} href="javascript:void(0)" >Escolher outro arquivo</a></div>)}
                         {!showArquivo && (<input type="file" accept=".docx, text/plain, application/pdf,image/png, image/jpeg" name="arquivo" onChange={(e)=>this.setState({arquivo : e.target.files[0]})} />)}
                         <br/>
