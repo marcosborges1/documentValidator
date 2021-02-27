@@ -48,7 +48,7 @@ class FileInsert extends Component {
         await axios.post(`${config.SERVER_URL}/verificarArquivoParaValidacao`,formData,configType).then(async (response)=> {
           
           if(response.data.length>0) {
-            document.getElementById("erro_existe_arquivo").innerHTML = "Já existe um arquivo com o mesmo conteúdo no Banco de Dados<br/><b>Por escolha o arquivo!</b>"
+            document.getElementById("erro_existe_arquivo").innerHTML = "Já existe um arquivo com o mesmo conteúdo no Banco de Dados<br/><b>Por favor, escolha outro arquivo!</b>"
             document.getElementById("enviar_arquivo").disabled=false;
             document.getElementById("enviar_arquivo").innerHTML="Salvar";
             return 
