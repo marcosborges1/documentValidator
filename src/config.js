@@ -1,10 +1,10 @@
 const BASE_URL = `${window.location.origin}`
-const PORT = 8080
+const PORT = 80
 
 
 if(BASE_URL.search("localhost") == -1) {
     module.exports = {
-        SERVER_URL:`http://54.82.65.68:80/`    
+        SERVER_URL:`http://54.82.65.68:${PORT}`    
     } 
 }
 else {
