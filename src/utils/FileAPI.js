@@ -34,7 +34,7 @@ export const insert = (body) =>
 export const remove = (data) =>  {
   const options = {
     url: `${api}/excluir${modulus}/${data.codigoArquivo}`,
-    timeout: 3000,
+    timeout: 6000,
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
