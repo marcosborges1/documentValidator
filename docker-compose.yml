@@ -1,0 +1,17 @@
+version: '3'
+services:
+    node:
+        build:
+            dockerfile: ./docker/front.dockerfile
+            context: .
+        image: italomarcos/front
+        container_name: front
+        ports:
+            - "3000:3000"
+        networks: 
+            - production-network
+networks: 
+    production-network:
+        driver: bridge
+
+        
